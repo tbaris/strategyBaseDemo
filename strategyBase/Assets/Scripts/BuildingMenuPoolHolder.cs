@@ -6,50 +6,43 @@ using UnityEngine.UI;
 
 public class BuildingMenuPoolHolder : MonoBehaviour
 {
-    private RectTransform contentHolderRect;
-    private ScrollRect thisScrollRect;
-    private RectTransform thisScrollRectTransfom;
-    private Vector2 resolution;
-    private int buttonTypeIndex = 0;
-
-    private float spacing = 0;
-    private float buttonSize = 0;
-    private float scrollWidth=0;
-    [SerializeField] private int desiredColumnCount = 2;
-
-    private List<BuildingMenuPool> menuPoolList;
 
     [SerializeField] private List<PooledButton> pooledMenuButtons;
-
-    public SortedDictionary<int, List<PooledButton>> buttonTable;
-   
+    [SerializeField] private int desiredColumnCount = 2;
 
 
+    private RectTransform contentHolderRect;
+    private ScrollRect thisScrollRect;
+    private Vector2 resolution;
+    private float spacing = 0;
+    private float buttonSize = 0;
+    private List<BuildingMenuPool> menuPoolList;
+    private SortedDictionary<int, List<PooledButton>> buttonTable;
     private int bottomIndex;
     private PooledButton bottomButtons;
     private int topIndex;
     private PooledButton topButtons;
-
     private int rows = 0;
+    
 
     private void Awake()
     {
         buttonTable = new SortedDictionary<int, List<PooledButton>>();
         menuPoolList = new List<BuildingMenuPool>();
+        
         if (pooledMenuButtons.Count > 0)
         {
             foreach (var button in pooledMenuButtons)
             { 
-                BuildingMenuPool menuPool = new BuildingMenuPool(button,this);
+                BuildingMenuPool menuPool = new BuildingMenuPool(button);
                 menuPoolList.Add(menuPool);
-                Debug.Log(menuPool+"----"+menuPool.prefab);
+
             }
         }
         else {DestroyImmediate(this);}
 
         resolution = new Vector2(Screen.width, Screen.height);
         thisScrollRect = GetComponent<ScrollRect>();
-        thisScrollRectTransfom = thisScrollRect.gameObject.GetComponent<RectTransform>();
         thisScrollRect.onValueChanged.AddListener(sliderMoved);
 
 
@@ -77,7 +70,7 @@ public class BuildingMenuPoolHolder : MonoBehaviour
 
     private void calculateDimensions()
     {
-        scrollWidth  = thisScrollRect.gameObject.GetComponent<RectTransform>().sizeDelta.x;
+        float scrollWidth  = thisScrollRect.gameObject.GetComponent<RectTransform>().sizeDelta.x;
         float scrollHeight = resolution.y;
         buttonSize = scrollWidth / (desiredColumnCount + 1);
         spacing = buttonSize / desiredColumnCount;
@@ -90,13 +83,10 @@ public class BuildingMenuPoolHolder : MonoBehaviour
         checkUpAndDownRowLimit();
     }
 
-    
-
-
 
     private void placeMenuButtons(int rows)
     {
-        buttonTypeIndex = 0;
+        int buttonTypeIndex = 0;
 
         for (int i = -rows / 2; i <= rows-2 / 2; i++)
         {
@@ -104,7 +94,6 @@ public class BuildingMenuPoolHolder : MonoBehaviour
         }
 
     }
-
 
 
     private List<PooledButton> getRow(int row,int poolIndex)
@@ -118,29 +107,33 @@ public class BuildingMenuPoolHolder : MonoBehaviour
             
         }
 
-        buttonTypeIndex = poolIndex;
+       
         return buttonRow;
     }
 
     private PooledButton placeButton(int i, int j,BuildingMenuPool pool)
     {
-        PooledButton buildingImagePooled = pool.Get();
+        PooledButton pooledButton = pool.Get();
 
-        buildingImagePooled.gameObject.SetActive(true);
+        pooledButton.gameObject.SetActive(true);
         RectTransform rectTransform;
-        (rectTransform = buildingImagePooled.rectTransform).SetParent(contentHolderRect);
+        (rectTransform = pooledButton.GetComponent<RectTransform>()).SetParent(contentHolderRect);
         rectTransform.sizeDelta = new Vector2(buttonSize, buttonSize);
         rectTransform.localScale = Vector3.one;
         rectTransform.anchoredPosition =
             new Vector2(
-                j * (buttonSize + spacing) + spacing / 2,
+                j * (buttonSize + spacing) + spacing / 2 + buttonSize /2,
                 i * (buttonSize + spacing)
             );
 
-        buildingImagePooled.myPool = pool;
-        return buildingImagePooled;
+        pooledButton.myPool = pool;
+        return pooledButton;
 
     }
+
+    
+
+
     private void checkUpAndDownRowLimit()
     {
         GetTopAndBottomButtons();

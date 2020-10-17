@@ -5,13 +5,14 @@ using UnityEngine;
 
 public class ScreenResChangeCheck : MonoBehaviour
 {
-    private Vector2 resolution;
-    public static event EventHandler<OnScreenResChangeArgs> OnScreenResChange;
-    public static ScreenResChangeCheck Instance;
     public class OnScreenResChangeArgs : EventArgs
     {
         public Vector2 res;
     }
+    private Vector2 resolution;
+    public static event EventHandler<OnScreenResChangeArgs> OnScreenResChange;
+    public static ScreenResChangeCheck Instance;
+   
 
     private void Awake()
     {
@@ -24,12 +25,12 @@ public class ScreenResChangeCheck : MonoBehaviour
     {
         if (resolution.x != Screen.width || resolution.y != Screen.height)
         {
-           
+            resolution.x = Screen.width;
+            resolution.y = Screen.height;
 
             OnScreenResChange?.Invoke(this, new OnScreenResChangeArgs{ res = resolution});
 
-            resolution.x = Screen.width;
-            resolution.y = Screen.height;
+            
         }
     }
 

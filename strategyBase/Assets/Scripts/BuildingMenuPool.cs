@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class BuildingMenuPool : ObjectPooler<PooledButton>
 {
-    public BuildingMenuPool(PooledButton poolingObject,BuildingMenuPoolHolder pHolder )
+    public BuildingMenuPool(PooledButton poolingObject )
     {
         prefab = poolingObject;
-        poolHolder = pHolder;
+      
     }
 
    

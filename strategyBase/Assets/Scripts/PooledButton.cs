@@ -4,20 +4,38 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
-using Debug = UnityEngine.Debug;
 
-public class PooledButton : Image
+
+
+
+public class PooledButton : Button
 {
+   
 
+    public GameObject building;
+  
     public BuildingMenuPool myPool;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        this.onClick.AddListener(sendTypeToSpawn);
+         
 
+    }
 
+    private void sendTypeToSpawn()
+    {
+        GameController.Instance.StartBuilding(building);
+
+    }
 
     public void returnToPool()
     {
         myPool.ReturnToPool(this);
     }
 
-   
+
+
+
 }

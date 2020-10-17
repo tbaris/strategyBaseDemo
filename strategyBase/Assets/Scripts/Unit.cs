@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public abstract class Unit : MonoBehaviour
 {
-    [SerializeField] private Vector2 baseSize;
+    public new string name;
+    public Vector2Int baseSize;
+    public Sprite sprite;
 
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SliderMove : MonoBehaviour
+public class EnvironmentObject : Unit
 {
-    
+        
 }
