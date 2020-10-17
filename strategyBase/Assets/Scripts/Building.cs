@@ -6,19 +6,19 @@ using UnityEngine;
 public class Building : PlayableObject
 {
     public bool isActive = false;
-    public List<productionButton> products;
+    public List<ProductionButton> products;
 
   
 
-    public void spawnUnit(GameObject spawnUnit)
+    public void SpawnUnit(GameObject spawnUnit)
     {
         
-        GridCell nearestEmptyCell = GridManager.Instance.getClosestEmptyPos(
-            new Vector3(transform.position.x + (baseSize.x/2) , transform.position.y + (baseSize.y/2 ), transform.position.z));
-        Vector3 spawnPos = GridManager.Instance.getWorldPos(nearestEmptyCell);
+        GridCell nearestEmptyCell = GridManager.Instance.GetClosestEmptyPos(
+            new Vector3(transform.position.x + (BaseSize.x/2) , transform.position.y + (BaseSize.y/2 ), transform.position.z));
+        Vector3 spawnPos = GridManager.Instance.GetWorldPos(nearestEmptyCell);
 
         GameObject unit = Instantiate(spawnUnit.gameObject);
-        nearestEmptyCell.isEmpty = false;
+        nearestEmptyCell.IsEmpty = false;
         unit.transform.position = spawnPos;
 
 

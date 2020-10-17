@@ -44,10 +44,10 @@ public class MouseControl : MonoBehaviour
         }
     }
 
-    public GridCell getGridPosOfCursor()
+    public GridCell GetGridPosOfCursor()
     {
         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        return GridManager.Instance.getCellAdress(worldPosition);
+        return GridManager.Instance.GetCellAdress(worldPosition);
         
     }
 

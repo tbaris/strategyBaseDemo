@@ -8,7 +8,7 @@ public class GameObjectPool : ObjectPooler<PooledObject>
 
     public GameObjectPool(PooledObject poolingObject)
     {
-        prefab = poolingObject;
+        Prefab = poolingObject;
 
     }
 

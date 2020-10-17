@@ -14,25 +14,25 @@ public class PooledButton : Button
 
     public GameObject building;
   
-    public BuildingMenuPool myPool;
+    public BuildingMenuPool MyPool;
 
     protected override void Awake()
     {
         base.Awake();
-        this.onClick.AddListener(sendTypeToSpawn);
+        this.onClick.AddListener(SendTypeToSpawn);
          
 
     }
 
-    private void sendTypeToSpawn()
+    private void SendTypeToSpawn()
     {
         GameController.Instance.StartBuilding(building);
 
     }
 
-    public void returnToPool()
+    public void ReturnToPool()
     {
-        myPool.ReturnToPool(this);
+        MyPool.ReturnToPool(this);
     }
 
 

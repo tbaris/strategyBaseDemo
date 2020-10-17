@@ -6,20 +6,20 @@ using UnityEngine;
 
 public class GridManager
 {
-    private int diagonalCost = 14;
-    private int straightCost = 10;
+    private int _diagonalCost = 14;
+    private int _straightCost = 10;
 
     public static GridManager Instance;
 
-    private int columns;
-    private int rows;
-    private float gridSize;
-    public Sprite cellSprite;
+    private int _columns;
+    private int _rows;
+    private float _gridSize;
+    public Sprite CellSprite;
 
    
 
 
-    public GridCell[,] gridCells;
+    public GridCell[,] GridCells;
 
     
     public GridManager(int col, int row, float size)
@@ -30,29 +30,29 @@ public class GridManager
         }
         Instance = this;
         
-        columns = col;
-        rows = row;
-        gridSize = size;
+        _columns = col;
+        _rows = row;
+        _gridSize = size;
 
-        gridCells = new GridCell[columns,rows];
-        for (int x = 0; x < gridCells.GetLength(0); x++)
+        GridCells = new GridCell[_columns,_rows];
+        for (int x = 0; x < GridCells.GetLength(0); x++)
         {
-            for (int y = 0; y < gridCells.GetLength(1); y++)
+            for (int y = 0; y < GridCells.GetLength(1); y++)
             {
-                gridCells[x,y] = new GridCell();
-                gridCells[x, y].isEmpty = true;
-                gridCells[x, y].gridPos = new Vector2Int(x, y);
-                gridCells[x, y].worldPos = getWorldPos(gridCells[x, y]);
+                GridCells[x,y] = new GridCell();
+                GridCells[x, y].IsEmpty = true;
+                GridCells[x, y].GridPos = new Vector2Int(x, y);
+                GridCells[x, y].WorldPos = GetWorldPos(GridCells[x, y]);
                 
             }
         }
 
     }
 
-    public bool isCellEmpty(GridCell cell)
+    public bool İsCellEmpty(GridCell cell)
     {
        
-            return cell.isEmpty;
+            return cell.IsEmpty;
         
        
     }
@@ -62,72 +62,72 @@ public class GridManager
     public void setObjectOnPos(GridCell cell,GameObject go)
     {
       
-            cell.isEmpty = false;
-            cell.gameObjectOnPos = go;
+            cell.IsEmpty = false;
+            cell.GameObjectOnPos = go;
         
     }
 
-    public void setCellsEmpty(int col, int row)
+    public void SetCellsEmpty(int col, int row)
     {
-        if (col < columns && col >= 0 && row < rows && col >= 0)
+        if (col < _columns && col >= 0 && row < _rows && col >= 0)
         {
-            gridCells[col, row].isEmpty = true;
+            GridCells[col, row].IsEmpty = true;
         }
     }
 
-    public GridCell getCellAdress(Vector3 worldPos)
+    public GridCell GetCellAdress(Vector3 worldPos)
     {
-        if (worldPos.x >= 0 && worldPos.y >= 0 && worldPos.x < columns * gridSize && worldPos.y < rows*gridSize)
+        if (worldPos.x >= 0 && worldPos.y >= 0 && worldPos.x < _columns * _gridSize && worldPos.y < _rows*_gridSize)
         {
-            return  gridCells[Mathf.FloorToInt(worldPos.x / gridSize) , Mathf.FloorToInt(worldPos.y / gridSize)];
+            return  GridCells[Mathf.FloorToInt(worldPos.x / _gridSize) , Mathf.FloorToInt(worldPos.y / _gridSize)];
         }
         else
         {
-            return gridCells[0, 0];
+            return GridCells[0, 0];
 
         }
     }
 
-    public Vector3 getWorldPos(GridCell a)
+    public Vector3 GetWorldPos(GridCell a)
     {
         
-            return new Vector3(a.gridPos.x*gridSize, a.gridPos.y* gridSize);
+            return new Vector3(a.GridPos.x*_gridSize, a.GridPos.y* _gridSize);
        
     }
 
-    public GridCell getClosestEmptyPos(Vector3 target)
+    public GridCell GetClosestEmptyPos(Vector3 target)
     {
-        float ClosestCellDistance= Int32.MaxValue;
-        GridCell ClosestCell = new GridCell();
-        GridCell startingCell = getCellAdress(target);
-        foreach (GridCell cell in gridCells)
+        float closestCellDistance= Int32.MaxValue;
+        GridCell closestCell = new GridCell();
+        GridCell startingCell = GetCellAdress(target);
+        foreach (GridCell cell in GridCells)
         {
-            if (cell.isEmpty)
+            if (cell.IsEmpty)
             {
-                float distance = (cell.worldPos - target).magnitude;
-                if (distance < ClosestCellDistance)
+                float distance = (cell.WorldPos - target).magnitude;
+                if (distance < closestCellDistance)
                 {
-                    ClosestCell = cell;
-                    ClosestCellDistance = distance;
+                    closestCell = cell;
+                    closestCellDistance = distance;
                 }
                 
             }
 
         }
         
-        return ClosestCell;
+        return closestCell;
 
 
     }
 
     private int DistanceBetween(GridCell a, GridCell b)
     {
-        int xdistance = Mathf.Abs(a.gridPos.x - b.gridPos.x);
-        int ydistance = Mathf.Abs(a.gridPos.y - b.gridPos.y);
+        int xdistance = Mathf.Abs(a.GridPos.x - b.GridPos.x);
+        int ydistance = Mathf.Abs(a.GridPos.y - b.GridPos.y);
         int straightPath = Mathf.Abs(xdistance - ydistance);
         int diagolanPath = Mathf.Min(xdistance, ydistance);
 
-        return diagonalCost * diagolanPath + straightPath * straightCost;
+        return _diagonalCost * diagolanPath + straightPath * _straightCost;
 
     }
 

@@ -8,8 +8,8 @@ public class GameController : MonoBehaviour
 {
     public static GameController Instance;
 
-    [SerializeField]private Vector2Int gridSize = Vector2Int.one;
-    [SerializeField] private float cellSize = 1.0f; private GridManager grid;
+    [SerializeField]private Vector2Int _gridSize = Vector2Int.one;
+    [SerializeField] private float cellSize = 1.0f; private GridManager _grid;
 
     public static event EventHandler<SelectedAObjectArgs> SelectedAObject; 
     public class SelectedAObjectArgs : EventArgs
@@ -30,7 +30,7 @@ public class GameController : MonoBehaviour
             Instance = this;
         }
 
-        grid = new GridManager(gridSize.x, gridSize.y, cellSize);
+        _grid = new GridManager(_gridSize.x, _gridSize.y, cellSize);
      
        
 
@@ -43,8 +43,8 @@ public class GameController : MonoBehaviour
             PlaceBuildings.Instance.PlaceBuilding();
         }
 
-        SelectedAObject?.Invoke(this, new SelectedAObjectArgs{SelectedGameObject = MouseControl.Instance.getGridPosOfCursor().gameObjectOnPos });
-        Debug.Log(MouseControl.Instance.getGridPosOfCursor().gameObjectOnPos);
+        SelectedAObject?.Invoke(this, new SelectedAObjectArgs{SelectedGameObject = MouseControl.Instance.GetGridPosOfCursor().GameObjectOnPos });
+        Debug.Log(MouseControl.Instance.GetGridPosOfCursor().GameObjectOnPos);
         
     }
     public void OnRightClick()
@@ -68,12 +68,12 @@ public class GameController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (grid != null)
+        if (_grid != null)
         {
-            foreach (var cell in grid.gridCells)
+            foreach (var cell in _grid.GridCells)
             {
                 Color gridColor = new Color();
-                if (cell.isEmpty)
+                if (cell.IsEmpty)
                 {
                     gridColor = Color.green;
                 }
@@ -83,7 +83,7 @@ public class GameController : MonoBehaviour
                 }
 
                 Gizmos.color = gridColor;
-                Gizmos.DrawCube(cell.worldPos, Vector3.one / 4);
+                Gizmos.DrawCube(cell.WorldPos, Vector3.one / 4);
             }
         }
 

@@ -6,21 +6,21 @@ using UnityEngine;
 public class PlaceBuildings : MonoBehaviour
 {
     public GameObject currentBuilding;
-    private Building currentBuildingInfo;
+    private Building _currentBuildingInfo;
 
     public static PlaceBuildings Instance;
 
     [SerializeField] private PooledObject squareRed;
-    private GameObjectPool squareRedPool;
-    private GameObjectPool squareGreenPool;
+    private GameObjectPool _squareRedPool;
+    private GameObjectPool _squareGreenPool;
     [SerializeField] private PooledObject squareGreen;
-    private List<PooledObject> activeIndicatorSquares;
+    private List<PooledObject> _activeIndicatorSquares;
 
     private void Awake()
     {
-        squareRedPool = new GameObjectPool(squareRed);
-        squareGreenPool = new GameObjectPool(squareGreen);
-        activeIndicatorSquares =  new List<PooledObject>();
+        _squareRedPool = new GameObjectPool(squareRed);
+        _squareGreenPool = new GameObjectPool(squareGreen);
+        _activeIndicatorSquares =  new List<PooledObject>();
         if (Instance != null && Instance != this)
         {
             Destroy(this.gameObject);
@@ -45,23 +45,23 @@ public class PlaceBuildings : MonoBehaviour
         {
 
             currentBuilding = Instantiate(building);
-            currentBuildingInfo = currentBuilding.GetComponent<Building>();
+            _currentBuildingInfo = currentBuilding.GetComponent<Building>();
         }
         else
         {
             Destroy(currentBuilding);
             currentBuilding = Instantiate(building);
-            currentBuildingInfo = currentBuilding.GetComponent<Building>();
+            _currentBuildingInfo = currentBuilding.GetComponent<Building>();
         }
         
     }
 
     private void MoveObjectWithCursor()
     {
-        currentBuilding.transform.position = MouseControl.Instance.getGridPosOfCursor().worldPos;
-        returnIndicatorsToPool();
+        currentBuilding.transform.position = MouseControl.Instance.GetGridPosOfCursor().WorldPos;
+        ReturnIndicatorsToPool();
         
-        isPlacementFieldEmpty();
+        İsPlacementFieldEmpty();
     }
 
     public void CancelBuilding()
@@ -69,51 +69,51 @@ public class PlaceBuildings : MonoBehaviour
         Destroy(currentBuilding);
     }
 
-    private void returnIndicatorsToPool()
+    private void ReturnIndicatorsToPool()
     {
-        if (activeIndicatorSquares.Count > 0)
+        if (_activeIndicatorSquares.Count > 0)
         {
-            foreach (PooledObject square in activeIndicatorSquares)
+            foreach (PooledObject square in _activeIndicatorSquares)
             {
-                square.returnToPool();
+                square.ReturnToPool();
             }
         }
-        activeIndicatorSquares.Clear();
+        _activeIndicatorSquares.Clear();
     }
     
-    private bool isPlacementFieldEmpty()
+    private bool İsPlacementFieldEmpty()
     {
        
 
         int redCount = 0;
         if(currentBuilding)
-        for (int i = 0; i < currentBuildingInfo.baseSize.x; i++)
+        for (int i = 0; i < _currentBuildingInfo.BaseSize.x; i++)
         {
-            for (int j = 0; j < currentBuildingInfo.baseSize.y; j++)
+            for (int j = 0; j < _currentBuildingInfo.BaseSize.y; j++)
             {
                 
-                GridCell cellAtCoord = MouseControl.Instance.getGridPosOfCursor();
+                GridCell cellAtCoord = MouseControl.Instance.GetGridPosOfCursor();
 
-                cellAtCoord = GridManager.Instance.gridCells[cellAtCoord.gridPos.x + i, cellAtCoord.gridPos.y + j];
+                cellAtCoord = GridManager.Instance.GridCells[cellAtCoord.GridPos.x + i, cellAtCoord.GridPos.y + j];
                
-                if (GridManager.Instance.isCellEmpty(cellAtCoord))
+                if (GridManager.Instance.İsCellEmpty(cellAtCoord))
                 {
-                     PooledObject green = squareGreenPool.Get();
-                     green.transform.position = GridManager.Instance.getWorldPos(cellAtCoord);
+                     PooledObject green = _squareGreenPool.Get();
+                     green.transform.position = GridManager.Instance.GetWorldPos(cellAtCoord);
                      green.gameObject.SetActive(true);
                      green.transform.SetParent(transform);;
-                     activeIndicatorSquares.Add(green);
-                     green.myPool = squareGreenPool;
+                     _activeIndicatorSquares.Add(green);
+                     green.MyPool = _squareGreenPool;
                 }
                 else
                 {
-                        PooledObject red = squareRedPool.Get();
-                        red.transform.position = GridManager.Instance.getWorldPos(cellAtCoord);
+                        PooledObject red = _squareRedPool.Get();
+                        red.transform.position = GridManager.Instance.GetWorldPos(cellAtCoord);
                         red.gameObject.SetActive(true);
                         red.transform.SetParent(transform); ;
                         redCount++;
-                        activeIndicatorSquares.Add(red);
-                        red.myPool = squareRedPool;
+                        _activeIndicatorSquares.Add(red);
+                        red.MyPool = _squareRedPool;
                 }
                 
                 
@@ -132,17 +132,17 @@ public class PlaceBuildings : MonoBehaviour
         
     }
 
-    private void fillGridCells()
+    private void FillGridCells()
     {
         if (currentBuilding)
         {
 
-            for (int i = 0; i < currentBuildingInfo.baseSize.x; i++)
+            for (int i = 0; i < _currentBuildingInfo.BaseSize.x; i++)
             {
-                for (int j = 0; j < currentBuildingInfo.baseSize.y; j++)
+                for (int j = 0; j < _currentBuildingInfo.BaseSize.y; j++)
                 {
-                    GridCell cellAtCoord = MouseControl.Instance.getGridPosOfCursor();
-                    cellAtCoord = GridManager.Instance.gridCells[cellAtCoord.gridPos.x + i, cellAtCoord.gridPos.y + j];
+                    GridCell cellAtCoord = MouseControl.Instance.GetGridPosOfCursor();
+                    cellAtCoord = GridManager.Instance.GridCells[cellAtCoord.GridPos.x + i, cellAtCoord.GridPos.y + j];
                     GridManager.Instance.setObjectOnPos(cellAtCoord, currentBuilding);
 
                 }
@@ -151,11 +151,11 @@ public class PlaceBuildings : MonoBehaviour
     }
     public void PlaceBuilding()
     {
-        if (isPlacementFieldEmpty())
+        if (İsPlacementFieldEmpty())
         {
-            fillGridCells();
-            returnIndicatorsToPool();
-            currentBuildingInfo.isActive = true;
+            FillGridCells();
+            ReturnIndicatorsToPool();
+            _currentBuildingInfo.isActive = true;
             currentBuilding = null;
         }
     }

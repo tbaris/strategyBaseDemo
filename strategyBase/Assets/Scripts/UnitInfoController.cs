@@ -8,41 +8,41 @@ public class UnitInfoController : MonoBehaviour
 {
     [SerializeField] private Image buildingImage;
     [SerializeField] private GameObject productionList;
-    private List<productionButton> activeButtonList;
-    private GameObject selectedGO;
+    private List<ProductionButton> _activeButtonList;
+    private GameObject _selectedGo;
     private void Awake()
     {
         GameController.SelectedAObject += RefreshBuildingInfo;
-        activeButtonList = new List<productionButton>();
+        _activeButtonList = new List<ProductionButton>();
     }
 
     private void RefreshBuildingInfo(object sender, GameController.SelectedAObjectArgs e)
     {
         if (e.SelectedGameObject == null)
         {
-            selectedGO = null;
+            _selectedGo = null;
 
-            if (activeButtonList.Count > 0)
+            if (_activeButtonList.Count > 0)
             {
-                foreach (var button in activeButtonList)
+                foreach (var button in _activeButtonList)
                 {
                     Destroy(button?.gameObject);
                 }
-                activeButtonList.Clear();
+                _activeButtonList.Clear();
             }
 
         }
         else
         {
-            selectedGO = e.SelectedGameObject;
+            _selectedGo = e.SelectedGameObject;
 
-            if (activeButtonList.Count > 0)
+            if (_activeButtonList.Count > 0)
             {
-                foreach (var button in activeButtonList)
+                foreach (var button in _activeButtonList)
                 {
                     Destroy(button?.gameObject);
                 }
-                activeButtonList.Clear();
+                _activeButtonList.Clear();
             }
 
             Building selectedBuilding = e.SelectedGameObject.GetComponent<Building>();
@@ -51,9 +51,9 @@ public class UnitInfoController : MonoBehaviour
             {
                 for (int i = 0; i < selectedBuilding.products.Count; i++)
                 {
-                    productionButton productButton = Instantiate(selectedBuilding.products[i]);
+                    ProductionButton productButton = Instantiate(selectedBuilding.products[i]);
                     productButton.transform.SetParent(productionList.transform);
-                    activeButtonList.Add(productButton);
+                    _activeButtonList.Add(productButton);
                     productButton.spawnBuilding=e.SelectedGameObject;
 
 

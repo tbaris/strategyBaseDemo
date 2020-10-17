@@ -7,9 +7,9 @@ public class ScreenResChangeCheck : MonoBehaviour
 {
     public class OnScreenResChangeArgs : EventArgs
     {
-        public Vector2 res;
+        public Vector2 Res;
     }
-    private Vector2 resolution;
+    private Vector2 _resolution;
     public static event EventHandler<OnScreenResChangeArgs> OnScreenResChange;
     public static ScreenResChangeCheck Instance;
    
@@ -17,18 +17,18 @@ public class ScreenResChangeCheck : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        resolution = new Vector2(Screen.width, Screen.height);
+        _resolution = new Vector2(Screen.width, Screen.height);
 
     }
 
     private void Update()
     {
-        if (resolution.x != Screen.width || resolution.y != Screen.height)
+        if (_resolution.x != Screen.width || _resolution.y != Screen.height)
         {
-            resolution.x = Screen.width;
-            resolution.y = Screen.height;
+            _resolution.x = Screen.width;
+            _resolution.y = Screen.height;
 
-            OnScreenResChange?.Invoke(this, new OnScreenResChangeArgs{ res = resolution});
+            OnScreenResChange?.Invoke(this, new OnScreenResChangeArgs{ Res = _resolution});
 
             
         }

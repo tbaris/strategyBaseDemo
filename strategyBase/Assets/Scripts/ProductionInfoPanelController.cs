@@ -2,11 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ProductionInfoPanelController : MonoBehaviour
 {
     [SerializeField] private GameObject gameInfoPanel;
-    [SerializeField] private GameObject ProductionInfoPanel;
+    [FormerlySerializedAs("ProductionInfoPanel")] [SerializeField] private GameObject productionInfoPanel;
     private void Awake()
     {
         GameController.SelectedAObject += SwitchPanel;
@@ -17,12 +18,12 @@ public class ProductionInfoPanelController : MonoBehaviour
         if (e.SelectedGameObject == null)
         {
             gameInfoPanel.gameObject.SetActive(true);
-            ProductionInfoPanel.gameObject.SetActive(false);
+            productionInfoPanel.gameObject.SetActive(false);
         }
         else
         {
             gameInfoPanel.gameObject.SetActive(false);
-            ProductionInfoPanel.gameObject.SetActive(true);
+            productionInfoPanel.gameObject.SetActive(true);
         }
     }
 }

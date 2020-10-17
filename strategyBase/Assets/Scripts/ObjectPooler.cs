@@ -6,10 +6,10 @@ using UnityEngine;
 
 public abstract class ObjectPooler<TObject> where TObject : Component
 {
-    public TObject prefab;
+    public TObject Prefab;
    
  //   public  static ObjectPooler<TObject> Instance { get; private set; }
-    private  Queue<TObject> objects = new Queue<TObject>();
+    private  Queue<TObject> _objects = new Queue<TObject>();
 
     
 
@@ -20,7 +20,7 @@ public abstract class ObjectPooler<TObject> where TObject : Component
 
     public virtual TObject Get()
     {
-        if (Application.isEditor && objects.Count > 20000)
+        if (Application.isEditor && _objects.Count > 20000)
         {
             
             Debug.Log("pooled object limit reached");
@@ -28,29 +28,29 @@ public abstract class ObjectPooler<TObject> where TObject : Component
             
 
         }
-        if (objects.Count == 0)
+        if (_objects.Count == 0)
         {
             AddObjects();
            
         }
 
 
-        return objects.Dequeue();
+        return _objects.Dequeue();
     }
 
     private void AddObjects()
     {
-        var newObject = GameObject.Instantiate(prefab);
+        var newObject = GameObject.Instantiate(Prefab);
         newObject.gameObject.SetActive(false);
        
-        objects.Enqueue(newObject);
+        _objects.Enqueue(newObject);
       
     }
 
     public void ReturnToPool(TObject returnThis)
     {
         returnThis.gameObject.SetActive(false);
-        objects.Enqueue(returnThis);
+        _objects.Enqueue(returnThis);
     }
     
 }

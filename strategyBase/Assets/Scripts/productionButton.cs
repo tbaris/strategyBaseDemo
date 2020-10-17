@@ -4,17 +4,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class productionButton : MonoBehaviour
+public class ProductionButton : MonoBehaviour
 {
     public GameObject prefab;
     public GameObject spawnBuilding;
     private void Awake()
     {
-        this.GetComponent<Button>().onClick.AddListener(orderSpawn);
+        this.GetComponent<Button>().onClick.AddListener(OrderSpawn);
     }
 
-    private void orderSpawn()
+    private void OrderSpawn()
     {
-        spawnBuilding.GetComponent<Building>()?.spawnUnit(prefab);
+        spawnBuilding.GetComponent<Building>()?.SpawnUnit(prefab);
     }
 }

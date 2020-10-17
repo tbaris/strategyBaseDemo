@@ -11,42 +11,42 @@ public class BuildingMenuPoolHolder : MonoBehaviour
     [SerializeField] private int desiredColumnCount = 2;
 
 
-    private RectTransform contentHolderRect;
-    private ScrollRect thisScrollRect;
-    private Vector2 resolution;
-    private float spacing = 0;
-    private float buttonSize = 0;
-    private List<BuildingMenuPool> menuPoolList;
-    private SortedDictionary<int, List<PooledButton>> buttonTable;
-    private int bottomIndex;
-    private PooledButton bottomButtons;
-    private int topIndex;
-    private PooledButton topButtons;
-    private int rows = 0;
+    private RectTransform _contentHolderRect;
+    private ScrollRect _thisScrollRect;
+    private Vector2 _resolution;
+    private float _spacing = 0;
+    private float _buttonSize = 0;
+    private List<BuildingMenuPool> _menuPoolList;
+    private SortedDictionary<int, List<PooledButton>> _buttonTable;
+    private int _bottomIndex;
+    private PooledButton _bottomButtons;
+    private int _topIndex;
+    private PooledButton _topButtons;
+    private int _rows = 0;
     
 
     private void Awake()
     {
-        buttonTable = new SortedDictionary<int, List<PooledButton>>();
-        menuPoolList = new List<BuildingMenuPool>();
+        _buttonTable = new SortedDictionary<int, List<PooledButton>>();
+        _menuPoolList = new List<BuildingMenuPool>();
         
         if (pooledMenuButtons.Count > 0)
         {
             foreach (var button in pooledMenuButtons)
             { 
                 BuildingMenuPool menuPool = new BuildingMenuPool(button);
-                menuPoolList.Add(menuPool);
+                _menuPoolList.Add(menuPool);
 
             }
         }
         else {DestroyImmediate(this);}
 
-        resolution = new Vector2(Screen.width, Screen.height);
-        thisScrollRect = GetComponent<ScrollRect>();
-        thisScrollRect.onValueChanged.AddListener(sliderMoved);
+        _resolution = new Vector2(Screen.width, Screen.height);
+        _thisScrollRect = GetComponent<ScrollRect>();
+        _thisScrollRect.onValueChanged.AddListener(SliderMoved);
 
 
-        contentHolderRect = thisScrollRect.content;
+        _contentHolderRect = _thisScrollRect.content;
 
 
         ScreenResChangeCheck.OnScreenResChange += ScreenResChangeCheck_OnScreenResChange;
@@ -62,47 +62,47 @@ public class BuildingMenuPoolHolder : MonoBehaviour
 
     private void Start()
     {
-        calculateDimensions();
-        placeMenuButtons(rows);
-        checkUpAndDownRowLimit();
+        CalculateDimensions();
+        PlaceMenuButtons(_rows);
+        CheckUpAndDownRowLimit();
 
     }
 
-    private void calculateDimensions()
+    private void CalculateDimensions()
     {
-        float scrollWidth  = thisScrollRect.gameObject.GetComponent<RectTransform>().sizeDelta.x;
-        float scrollHeight = resolution.y;
-        buttonSize = scrollWidth / (desiredColumnCount + 1);
-        spacing = buttonSize / desiredColumnCount;
-        rows = Mathf.CeilToInt((scrollHeight / (buttonSize + spacing)) + 1);
+        float scrollWidth  = _thisScrollRect.gameObject.GetComponent<RectTransform>().sizeDelta.x;
+        float scrollHeight = _resolution.y;
+        _buttonSize = scrollWidth / (desiredColumnCount + 1);
+        _spacing = _buttonSize / desiredColumnCount;
+        _rows = Mathf.CeilToInt((scrollHeight / (_buttonSize + _spacing)) + 1);
         
     }
 
-    public void sliderMoved(Vector2 vec2)
+    public void SliderMoved(Vector2 vec2)
     {
-        checkUpAndDownRowLimit();
+        CheckUpAndDownRowLimit();
     }
 
 
-    private void placeMenuButtons(int rows)
+    private void PlaceMenuButtons(int rows)
     {
         int buttonTypeIndex = 0;
 
         for (int i = -rows / 2; i <= rows-2 / 2; i++)
         {
-            buttonTable.Add(i,getRow(i, buttonTypeIndex));
+            _buttonTable.Add(i,GetRow(i, buttonTypeIndex));
         }
 
     }
 
 
-    private List<PooledButton> getRow(int row,int poolIndex)
+    private List<PooledButton> GetRow(int row,int poolIndex)
     {
         List<PooledButton> buttonRow = new List<PooledButton>();
         for (int j = 0; j < desiredColumnCount; j++)
         {
 
-            buttonRow.Add(placeButton(row, j, menuPoolList[poolIndex % (menuPoolList.Count)]));
+            buttonRow.Add(PlaceButton(row, j, _menuPoolList[poolIndex % (_menuPoolList.Count)]));
             poolIndex++;
             
         }
@@ -111,22 +111,22 @@ public class BuildingMenuPoolHolder : MonoBehaviour
         return buttonRow;
     }
 
-    private PooledButton placeButton(int i, int j,BuildingMenuPool pool)
+    private PooledButton PlaceButton(int i, int j,BuildingMenuPool pool)
     {
         PooledButton pooledButton = pool.Get();
 
         pooledButton.gameObject.SetActive(true);
         RectTransform rectTransform;
-        (rectTransform = pooledButton.GetComponent<RectTransform>()).SetParent(contentHolderRect);
-        rectTransform.sizeDelta = new Vector2(buttonSize, buttonSize);
+        (rectTransform = pooledButton.GetComponent<RectTransform>()).SetParent(_contentHolderRect);
+        rectTransform.sizeDelta = new Vector2(_buttonSize, _buttonSize);
         rectTransform.localScale = Vector3.one;
         rectTransform.anchoredPosition =
             new Vector2(
-                j * (buttonSize + spacing) + spacing / 2 + buttonSize /2,
-                i * (buttonSize + spacing)
+                j * (_buttonSize + _spacing) + _spacing / 2 + _buttonSize /2,
+                i * (_buttonSize + _spacing)
             );
 
-        pooledButton.myPool = pool;
+        pooledButton.MyPool = pool;
         return pooledButton;
 
     }
@@ -134,30 +134,30 @@ public class BuildingMenuPoolHolder : MonoBehaviour
     
 
 
-    private void checkUpAndDownRowLimit()
+    private void CheckUpAndDownRowLimit()
     {
         GetTopAndBottomButtons();
 
 
-        while (bottomButtons.transform.position.y > -resolution.y / 2)
+        while (_bottomButtons.transform.position.y > -_resolution.y / 2)
         {
-            addRow(bottomIndex - 1, menuPoolList.IndexOf(buttonTable[bottomIndex][desiredColumnCount - 1].myPool) + 1);
+            AddRow(_bottomIndex - 1, _menuPoolList.IndexOf(_buttonTable[_bottomIndex][desiredColumnCount - 1].MyPool) + 1);
             GetTopAndBottomButtons();
         }
 
-        while (topButtons.transform.position.y < resolution.y * 1.5f)
+        while (_topButtons.transform.position.y < _resolution.y * 1.5f)
         {
-            addRow(topIndex + 1, menuPoolList.IndexOf(buttonTable[topIndex][desiredColumnCount - 1].myPool) + 1);
+            AddRow(_topIndex + 1, _menuPoolList.IndexOf(_buttonTable[_topIndex][desiredColumnCount - 1].MyPool) + 1);
             GetTopAndBottomButtons();
         }
-        while (topButtons.transform.position.y > resolution.y * 2)
+        while (_topButtons.transform.position.y > _resolution.y * 2)
         {
-            returnRowToPool(topIndex);
+            ReturnRowToPool(_topIndex);
             GetTopAndBottomButtons();
         }
-        while (bottomButtons.transform.position.y < -resolution.y)
+        while (_bottomButtons.transform.position.y < -_resolution.y)
         {
-            returnRowToPool(bottomIndex);
+            ReturnRowToPool(_bottomIndex);
             GetTopAndBottomButtons();
         }
 
@@ -167,27 +167,27 @@ public class BuildingMenuPoolHolder : MonoBehaviour
     private void GetTopAndBottomButtons()
     {
         
-        bottomIndex = buttonTable.ElementAt(0).Key;
-        bottomButtons = buttonTable[bottomIndex][0];
-        topIndex = buttonTable.ElementAt(buttonTable.Count - 1).Key;
-        topButtons = buttonTable[topIndex][0];
+        _bottomIndex = _buttonTable.ElementAt(0).Key;
+        _bottomButtons = _buttonTable[_bottomIndex][0];
+        _topIndex = _buttonTable.ElementAt(_buttonTable.Count - 1).Key;
+        _topButtons = _buttonTable[_topIndex][0];
     }
 
-    private void addRow(int row,int buttonPool)
+    private void AddRow(int row,int buttonPool)
     {
         
-        buttonTable.Add(row, getRow(row, buttonPool));
+        _buttonTable.Add(row, GetRow(row, buttonPool));
     }
 
-    private void returnRowToPool(int row)
+    private void ReturnRowToPool(int row)
     {
        
-        foreach (PooledButton button in buttonTable[row])
+        foreach (PooledButton button in _buttonTable[row])
         {
-            button.returnToPool();
+            button.ReturnToPool();
         }
 
-        buttonTable.Remove(row);
+        _buttonTable.Remove(row);
     }
 
 }

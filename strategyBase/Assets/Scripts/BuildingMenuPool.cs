@@ -7,7 +7,7 @@ public class BuildingMenuPool : ObjectPooler<PooledButton>
 {
     public BuildingMenuPool(PooledButton poolingObject )
     {
-        prefab = poolingObject;
+        Prefab = poolingObject;
       
     }
 

@@ -5,14 +5,17 @@ using UnityEngine;
 
 public class GridCell 
 {
-    public Vector3 worldPos;
-    public Vector2Int gridPos;
-    public bool isEmpty = true;
-    public GameObject gameObjectOnPos = null;
+    public Vector3 WorldPos;
+    public Vector2Int GridPos;
+    public bool IsEmpty = true;
+    public GameObject GameObjectOnPos = null;
 
-    public int gCost = 0;
-    public int hCost = 0;
-    public int totalCost = 0;
+
+    //data for pathfinder
+    public int GCost = 0;
+    public int HCost = 0;
+    public int TotalCost = 0;
+    public GridCell PreviousCell;
 
 
 }

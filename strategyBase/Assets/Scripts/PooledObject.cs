@@ -5,10 +5,10 @@ using UnityEngine;
 public class PooledObject : MonoBehaviour
 {
 
-    public GameObjectPool myPool;
+    public GameObjectPool MyPool;
 
-    public void returnToPool()
+    public void ReturnToPool()
     {
-        myPool.ReturnToPool(this);
+        MyPool.ReturnToPool(this);
     }
 }
