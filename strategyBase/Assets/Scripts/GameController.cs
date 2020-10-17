@@ -11,7 +11,11 @@ public class GameController : MonoBehaviour
     [SerializeField]private Vector2Int gridSize = Vector2Int.one;
     [SerializeField] private float cellSize = 1.0f; private GridManager grid;
 
- //   public static event Action<GameObject> SelectedAObject; 
+    public static event EventHandler<SelectedAObjectArgs> SelectedAObject; 
+    public class SelectedAObjectArgs : EventArgs
+    {
+        public GameObject SelectedGameObject;
+    }
     
     private void Awake()
     {
@@ -37,11 +41,11 @@ public class GameController : MonoBehaviour
         if (PlaceBuildings.Instance.currentBuilding != null)
         {
             PlaceBuildings.Instance.PlaceBuilding();
-        }else if (MouseControl.Instance.getGridPosOfCursor().gameObjectOnPos)
-        {
-          //  SelectedAObject(MouseControl.Instance.getGridPosOfCursor().gameObjectOnPos);
-            Debug.Log(MouseControl.Instance.getGridPosOfCursor().gameObjectOnPos);
         }
+
+        SelectedAObject?.Invoke(this, new SelectedAObjectArgs{SelectedGameObject = MouseControl.Instance.getGridPosOfCursor().gameObjectOnPos });
+        Debug.Log(MouseControl.Instance.getGridPosOfCursor().gameObjectOnPos);
+        
     }
     public void OnRightClick()
     {

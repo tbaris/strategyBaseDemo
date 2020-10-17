@@ -71,7 +71,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 3d14b1fac9fa4c74c860a8196e48a0b9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7d64307fd19c3cd4ea83ac77c4faf658, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -97,6 +97,8 @@ MonoBehaviour:
   name: Soldier
   baseSize: {x: 1, y: 1}
   sprite: {fileID: 21300000, guid: 3d14b1fac9fa4c74c860a8196e48a0b9, type: 3}
+  pooledButton: {fileID: -2110911707065159088, guid: 74f54d4867937354da9bb3474fd015c1,
+    type: 3}
   factionId: 0
   Health: 10
   speed: 1
