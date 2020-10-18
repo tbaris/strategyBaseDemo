@@ -23,6 +23,8 @@ public class MovingUnits : PlayableObject
         
         
         base.setDestination(target);
+        _pathQueue.Clear();
+
         Pathfind pathfind = GameObject.FindObjectOfType<Pathfind>();
         List<GridCell> path = pathfind.FindPath(GridManager.Instance.GetCellAdress(transform.position), target);
         for (int i = 0; i < path?.Count; i++)
@@ -46,7 +48,7 @@ public class MovingUnits : PlayableObject
         
         if(nextStop.WorldPos != transform.position)
         {
-                transform.position = Vector2.MoveTowards(transform.position, nextStop.WorldPos, speed);
+                transform.position = Vector2.MoveTowards(transform.position, nextStop.WorldPos, speed* Time.deltaTime);
                 
         }
            
