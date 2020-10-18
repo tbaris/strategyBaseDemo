@@ -61,7 +61,7 @@ public class PlaceBuildings : MonoBehaviour
         currentBuilding.transform.position = MouseControl.Instance.GetGridPosOfCursor().WorldPos;
         ReturnIndicatorsToPool();
         
-        İsPlacementFieldEmpty();
+        IsPlacementFieldEmpty();
     }
 
     public void CancelBuilding()
@@ -81,7 +81,7 @@ public class PlaceBuildings : MonoBehaviour
         _activeIndicatorSquares.Clear();
     }
     
-    private bool İsPlacementFieldEmpty()
+    private bool IsPlacementFieldEmpty()
     {
        
 
@@ -96,7 +96,7 @@ public class PlaceBuildings : MonoBehaviour
 
                 cellAtCoord = GridManager.Instance.GridCells[cellAtCoord.GridPos.x + i, cellAtCoord.GridPos.y + j];
                
-                if (GridManager.Instance.İsCellEmpty(cellAtCoord))
+                if (GridManager.Instance.IsCellEmpty(cellAtCoord))
                 {
                      PooledObject green = _squareGreenPool.Get();
                      green.transform.position = GridManager.Instance.GetWorldPos(cellAtCoord);
@@ -137,21 +137,12 @@ public class PlaceBuildings : MonoBehaviour
         if (currentBuilding)
         {
 
-            for (int i = 0; i < _currentBuildingInfo.BaseSize.x; i++)
-            {
-                for (int j = 0; j < _currentBuildingInfo.BaseSize.y; j++)
-                {
-                    GridCell cellAtCoord = MouseControl.Instance.GetGridPosOfCursor();
-                    cellAtCoord = GridManager.Instance.GridCells[cellAtCoord.GridPos.x + i, cellAtCoord.GridPos.y + j];
-                    GridManager.Instance.setObjectOnPos(cellAtCoord, currentBuilding);
-
-                }
-            }
+           GridManager.Instance.setObjectOnPos(currentBuilding);
         }
     }
     public void PlaceBuilding()
     {
-        if (İsPlacementFieldEmpty())
+        if (IsPlacementFieldEmpty())
         {
             FillGridCells();
             ReturnIndicatorsToPool();

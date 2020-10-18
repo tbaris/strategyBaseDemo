@@ -95,9 +95,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: PowerPlant
-  baseSize: {x: 2, y: 3}
+  BaseSize: {x: 2, y: 3}
   sprite: {fileID: 21300000, guid: f99aa159f3f7e1b42ace7afb9a95623e, type: 3}
+  pooledButton: {fileID: 0}
   factionId: 0
-  Health: 100
+  health: 100
   isActive: 0
   products: []

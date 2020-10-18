@@ -16,6 +16,8 @@ public class GameController : MonoBehaviour
     {
         public GameObject SelectedGameObject;
     }
+
+    private GameObject _selectedGo;
     
     private void Awake()
     {
@@ -43,7 +45,13 @@ public class GameController : MonoBehaviour
             PlaceBuildings.Instance.PlaceBuilding();
         }
 
-        SelectedAObject?.Invoke(this, new SelectedAObjectArgs{SelectedGameObject = MouseControl.Instance.GetGridPosOfCursor().GameObjectOnPos });
+        if (MouseControl.Instance.GetGridPosOfCursor() != null)
+        {
+            _selectedGo = MouseControl.Instance.GetGridPosOfCursor().GameObjectOnPos;
+            SelectedAObject?.Invoke(this, new SelectedAObjectArgs { SelectedGameObject = _selectedGo });
+        }
+        
+        
         Debug.Log(MouseControl.Instance.GetGridPosOfCursor().GameObjectOnPos);
         
     }
@@ -52,6 +60,15 @@ public class GameController : MonoBehaviour
         if (PlaceBuildings.Instance.currentBuilding != null)
         {
             PlaceBuildings.Instance.CancelBuilding();
+        }
+
+        if (_selectedGo != null)
+        {
+            if (_selectedGo.GetComponent<PlayableObject>())
+            {
+                _selectedGo.GetComponent<PlayableObject>().setDestination(MouseControl.Instance.GetGridPosOfCursor());
+            }
+            
         }
     }
     public void OnMiddleClick()

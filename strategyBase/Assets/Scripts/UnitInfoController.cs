@@ -18,6 +18,7 @@ public class UnitInfoController : MonoBehaviour
 
     private void RefreshBuildingInfo(object sender, GameController.SelectedAObjectArgs e)
     {
+       
         if (e.SelectedGameObject == null)
         {
             _selectedGo = null;
@@ -32,8 +33,9 @@ public class UnitInfoController : MonoBehaviour
             }
 
         }
-        else
+        else if(e.SelectedGameObject.GetComponent<Building>())
         {
+           
             _selectedGo = e.SelectedGameObject;
 
             if (_activeButtonList.Count > 0)
@@ -59,6 +61,19 @@ public class UnitInfoController : MonoBehaviour
 
                 }
             }
+        }else if (e.SelectedGameObject.GetComponent<Unit>())
+        {
+            _selectedGo = e.SelectedGameObject;
+
+            if (_activeButtonList.Count > 0)
+            {
+                foreach (var button in _activeButtonList)
+                {
+                    Destroy(button?.gameObject);
+                }
+                _activeButtonList.Clear();
+            }
+            buildingImage.sprite = e.SelectedGameObject.GetComponent<Unit>().sprite;
         }
     }
 

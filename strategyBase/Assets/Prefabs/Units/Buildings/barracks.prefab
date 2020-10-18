@@ -95,11 +95,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Barracks
-  baseSize: {x: 4, y: 4}
+  BaseSize: {x: 4, y: 4}
   sprite: {fileID: 21300000, guid: 94ddb5bab2522ca4ebc8b15fd5016b05, type: 3}
   pooledButton: {fileID: 0}
   factionId: 0
-  Health: 100
+  health: 100
   isActive: 0
   products:
   - {fileID: 3651630600088671137, guid: 74f54d4867937354da9bb3474fd015c1, type: 3}

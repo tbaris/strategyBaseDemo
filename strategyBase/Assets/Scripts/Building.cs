@@ -15,12 +15,12 @@ public class Building : PlayableObject
         
         GridCell nearestEmptyCell = GridManager.Instance.GetClosestEmptyPos(
             new Vector3(transform.position.x + (BaseSize.x/2) , transform.position.y + (BaseSize.y/2 ), transform.position.z));
+
+        
         Vector3 spawnPos = GridManager.Instance.GetWorldPos(nearestEmptyCell);
 
-        GameObject unit = Instantiate(spawnUnit.gameObject);
-        nearestEmptyCell.IsEmpty = false;
-        unit.transform.position = spawnPos;
-
+        GameObject unit = Instantiate(spawnUnit.gameObject,spawnPos,Quaternion.identity);
+        GridManager.Instance.setObjectOnPos(unit);
 
     }
 

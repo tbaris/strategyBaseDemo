@@ -8,5 +8,9 @@ public class PlayableObject : Unit
 {
     public int factionId; //Change to enum later
     [FormerlySerializedAs("Health")] public int health;
-    
+    private GridCell targetCell;
+    public virtual void setDestination(GridCell target)
+    {
+        targetCell = target;
+    }
 }

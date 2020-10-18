@@ -49,27 +49,77 @@ public class GridManager
 
     }
 
-    public bool İsCellEmpty(GridCell cell)
+    public bool IsCellEmpty(GridCell cell)
     {
        
             return cell.IsEmpty;
         
        
     }
-
-   
-
-    public void setObjectOnPos(GridCell cell,GameObject go)
+    public bool IsCellEmpty(int x, int y)
     {
-      
-            cell.IsEmpty = false;
-            cell.GameObjectOnPos = go;
-        
+        if (x >= 0 && x < _columns && y >= 0 && y < _rows)
+        {
+            return GridCells[x, y].IsEmpty;
+        }
+        else
+        {
+            return false;
+        }
+
+       
+    }
+
+
+
+    public void setObjectOnPos(GameObject go)
+    {
+        Debug.Log(go.name);
+        if (go.GetComponent<Unit>())
+        {
+            Debug.Log(go.GetType());
+            Vector2Int bSize = go.GetComponent<Unit>().BaseSize;
+            for (int i = 0; i < bSize.x; i++)
+            {
+                for (int j = 0; j < bSize.y; j++)
+                {
+                    GridCell cellAtCoord = GetCellAdress(go.transform.position);
+                    cellAtCoord = GridManager.Instance.GridCells[cellAtCoord.GridPos.x + i, cellAtCoord.GridPos.y + j];
+                    cellAtCoord.GameObjectOnPos = go.gameObject;
+                    cellAtCoord.IsEmpty = false;
+                    Debug.Log(cellAtCoord.GridPos);
+
+                }
+            }
+        }
+
+    }
+    public void removeObjectOnPos(GameObject go)
+    {
+        Debug.Log(go.name);
+        if (go.GetComponent<Unit>())
+        {
+            Debug.Log(go.GetType());
+            Vector2Int bSize = go.GetComponent<Unit>().BaseSize;
+            for (int i = 0; i < bSize.x; i++)
+            {
+                for (int j = 0; j < bSize.y; j++)
+                {
+                    GridCell cellAtCoord = GetCellAdress(go.transform.position);
+                    cellAtCoord = GridManager.Instance.GridCells[cellAtCoord.GridPos.x + i, cellAtCoord.GridPos.y + j];
+                    cellAtCoord.GameObjectOnPos = null;
+                    cellAtCoord.IsEmpty = true;
+                    
+
+                }
+            }
+        }
+
     }
 
     public void SetCellsEmpty(int col, int row)
     {
-        if (col < _columns && col >= 0 && row < _rows && col >= 0)
+        if (col < _columns && col >= 0 && row < _rows && row >= 0)
         {
             GridCells[col, row].IsEmpty = true;
         }
@@ -77,12 +127,14 @@ public class GridManager
 
     public GridCell GetCellAdress(Vector3 worldPos)
     {
-        if (worldPos.x >= 0 && worldPos.y >= 0 && worldPos.x < _columns * _gridSize && worldPos.y < _rows*_gridSize)
+        if (worldPos.x >= 0 && worldPos.y >= 0 && worldPos.x < (_columns * _gridSize) && worldPos.y < (_rows*_gridSize))
         {
+           
             return  GridCells[Mathf.FloorToInt(worldPos.x / _gridSize) , Mathf.FloorToInt(worldPos.y / _gridSize)];
         }
         else
         {
+            Debug.Log(worldPos.x +"---" +( _columns * _gridSize) + "---" + worldPos.y +"---" +(_rows * _gridSize));
             return GridCells[0, 0];
 
         }
@@ -129,6 +181,17 @@ public class GridManager
 
         return _diagonalCost * diagolanPath + straightPath * _straightCost;
 
+    }
+
+    public void ResetPathfindData()
+    {
+        foreach (GridCell cell in GridCells)
+        {
+            cell.GCost = 0;
+            cell.HCost = 0;
+            cell.TotalCost = 0;
+            cell.PreviousCell = null;
+        }
     }
 
 }
