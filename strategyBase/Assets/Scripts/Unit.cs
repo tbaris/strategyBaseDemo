@@ -1,14 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
-
-public abstract class Unit : MonoBehaviour
+namespace Assets.Scripts
 {
-    public new string name;
-    public Vector2Int BaseSize;
-    public Sprite sprite;
-    public Button pooledButton;
-
+    public abstract class Unit : MonoBehaviour
+    {
+        public new string name;
+        public Vector2Int BaseSize;
+        public Sprite sprite;
+    
+    }
 }

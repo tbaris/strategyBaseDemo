@@ -1,21 +1,26 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class GridCell 
+namespace Assets.Scripts
 {
-    public Vector3 WorldPos;
-    public Vector2Int GridPos;
-    public bool IsEmpty = true;
-    public GameObject GameObjectOnPos = null;
+    public class GridCell 
+    {
+        public Vector3 WorldPos;
+        public Vector2Int GridPos;
+        public bool IsEmpty = true;
+        public GameObject GameObjectOnPos = null;
+        public bool IsGround { get; private set; }
 
 
-    //data for pathfinder
-    public int GCost = 0;
-    public int HCost = 0;
-    public int TotalCost = 0;
-    public GridCell PreviousCell;
+        //data for pathfinder
+        public int GCost = 0;
+        public int HCost = 0;
+        public int TotalCost = 0;
+        public GridCell PreviousCell;
 
+        public GridCell(bool _isGround)
+        {
+            IsGround = _isGround;
+        }
 
+    }
 }

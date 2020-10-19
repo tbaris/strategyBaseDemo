@@ -1,20 +1,20 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class ProductionButton : MonoBehaviour
+namespace Assets.Scripts
 {
-    public GameObject prefab;
-    public GameObject spawnBuilding;
-    private void Awake()
+    public class ProductionButton : MonoBehaviour
     {
-        this.GetComponent<Button>().onClick.AddListener(OrderSpawn);
-    }
+        public GameObject prefab;
+        public GameObject spawnBuilding;
+        private void Awake()
+        {
+            this.GetComponent<Button>().onClick.AddListener(OrderSpawn);
+        }
 
-    private void OrderSpawn()
-    {
-        spawnBuilding.GetComponent<Building>()?.SpawnUnit(prefab);
+        private void OrderSpawn()
+        {
+            spawnBuilding.GetComponent<Building>()?.SpawnUnit(prefab);
+        }
     }
 }

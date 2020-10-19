@@ -1,57 +1,57 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class MouseControl : MonoBehaviour
+namespace Assets.Scripts
 {
+    public class MouseControl : MonoBehaviour
+    {
     
 
-    public static MouseControl Instance;
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
+        public static MouseControl Instance;
+        private void Awake()
         {
-            Destroy(this.gameObject);
+            if (Instance != null && Instance != this)
+            {
+                Destroy(this.gameObject);
+            }
+            else
+            {
+                Instance = this;
+            }
         }
-        else
+
+        void Update()
         {
-            Instance = this;
-        }
-    }
+            if(EventSystem.current.IsPointerOverGameObject())
+                return;
 
-    void Update()
-    {
-        if(EventSystem.current.IsPointerOverGameObject())
-            return;
+            if (Input.GetMouseButtonDown(0))
+            {
 
-        if (Input.GetMouseButtonDown(0))
-        {
+                GameController.Instance.OnLeftClick();
+            }
+            if (Input.GetMouseButtonDown(1))
+            {
 
-            GameController.Instance.OnLeftClick();
-        }
-        if (Input.GetMouseButtonDown(1))
-        {
-
-            GameController.Instance.OnRightClick();
-        }
+                GameController.Instance.OnRightClick();
+            }
         
-        if (Input.GetMouseButtonDown(2))
-        {
+            if (Input.GetMouseButtonDown(2))
+            {
 
-            GameController.Instance.OnMiddleClick();
+                GameController.Instance.OnMiddleClick();
+            }
         }
-    }
 
-    public GridCell GetGridPosOfCursor()
-    {
-        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        public GridCell GetGridPosOfCursor()
+        {
+            Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         
      
-        return GridManager.Instance.GetCellAdress(worldPosition);
+            return GridManager.Instance.GetCellAdress(worldPosition);
         
+        }
+
+
     }
-
-
 }

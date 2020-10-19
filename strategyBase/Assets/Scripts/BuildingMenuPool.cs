@@ -1,15 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-
-public class BuildingMenuPool : ObjectPooler<PooledButton>
+﻿namespace Assets.Scripts
 {
-    public BuildingMenuPool(PooledButton poolingObject )
+    public class BuildingMenuPool : ObjectPooler<PooledButton>
     {
-        Prefab = poolingObject;
+        public BuildingMenuPool(PooledButton poolingObject )
+        {
+            Prefab = poolingObject;
       
-    }
+        }
 
    
+    }
 }

@@ -1,16 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using UnityEngine;
-using UnityEngine.Serialization;
+﻿using UnityEngine;
 
-public class PlayableObject : Unit
+namespace Assets.Scripts
 {
-    public int factionId; //Change to enum later
-    [FormerlySerializedAs("Health")] public int health;
-    private GridCell targetCell;
-    public virtual void setDestination(GridCell target)
+    public class PlayableObject : Unit
     {
-        targetCell = target;
+        public int factionId; //Change to enum later
+
+        [SerializeField]private int _health;
+
+        private GridCell _targetCell;
+
+        public virtual void SetDestination(GridCell target)
+        {
+            _targetCell = target;
+        }
     }
 }

@@ -1,67 +1,62 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class MovingUnits : PlayableObject
+namespace Assets.Scripts
 {
-    [SerializeField]private float speed;
+    public class MovingUnits : PlayableObject
+    {
+        [SerializeField]private float speed;
    
-    private Queue<GridCell> _pathQueue = new Queue<GridCell>();
-    private bool isStoped = true;
-    private GridCell nextStop;
+        private Queue<GridCell> _pathQueue = new Queue<GridCell>();
+        private bool _isStoped = true;
+        private GridCell _nextStop;
 
 
-    private void Awake()
-    {
-        _pathQueue = new Queue<GridCell>();
-        nextStop = GridManager.Instance.GetCellAdress(transform.position);
-    }
-
-    public override void setDestination(GridCell target)
-    {
-        
-        
-        base.setDestination(target);
-        _pathQueue.Clear();
-
-        Pathfind pathfind = GameObject.FindObjectOfType<Pathfind>();
-        List<GridCell> path = pathfind.FindPath(GridManager.Instance.GetCellAdress(transform.position), target);
-        for (int i = 0; i < path?.Count; i++)
+        private void Awake()
         {
-            _pathQueue.Enqueue(path[i]); 
+            _pathQueue = new Queue<GridCell>();
+            _nextStop = GridManager.Instance.GetCellAdress(transform.position);
         }
-    }
 
-    private void Update()
-    {
-        if (nextStop.WorldPos == transform.position)
+        public override void SetDestination(GridCell target)
         {
-            GridManager.Instance.setObjectOnPos(this.gameObject);
-            if (_pathQueue.Count > 0)
+        
+        
+            base.SetDestination(target);
+            _pathQueue.Clear();
+
+            Pathfind pathfinder = GameObject.FindObjectOfType<Pathfind>();
+            List<GridCell> path = pathfinder.FindPath(GridManager.Instance.GetCellAdress(transform.position), target);
+            for (int i = 0; i < path?.Count; i++)
             {
-           
-                nextStop = _pathQueue.Dequeue();
-                GridManager.Instance.removeObjectOnPos(this.gameObject);
+                _pathQueue.Enqueue(path[i]); 
             }
         }
-        
-        if(nextStop.WorldPos != transform.position)
+
+        private void Update()
         {
-                transform.position = Vector2.MoveTowards(transform.position, nextStop.WorldPos, speed* Time.deltaTime);
+            if (_nextStop.WorldPos == transform.position)
+            {
+                GridManager.Instance.setObjectOnPos(this.gameObject);
+                if (_pathQueue.Count > 0)
+                {
+           
+                    _nextStop = _pathQueue.Dequeue();
+                    GridManager.Instance.removeObjectOnPos(this.gameObject);
+                }
+            }
+        
+            if(_nextStop.WorldPos != transform.position)
+            {
+                transform.position = Vector2.MoveTowards(transform.position, _nextStop.WorldPos, speed* Time.deltaTime);
                 
-        }
+            }
            
             
 
         
-    }
-
-    private void move(Queue<GridCell> path)
-    {
-        if (path.Count > 0)
-        {
-            transform.position = Vector2.MoveTowards(transform.position,_pathQueue.Dequeue().WorldPos,speed);
         }
+
+ 
     }
 }

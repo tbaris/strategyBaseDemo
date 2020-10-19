@@ -1,81 +1,81 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditorInternal.VersionControl;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UnitInfoController : MonoBehaviour
+namespace Assets.Scripts
 {
-    [SerializeField] private Image buildingImage;
-    [SerializeField] private GameObject productionList;
-    private List<ProductionButton> _activeButtonList;
-    private GameObject _selectedGo;
-    private void Awake()
+    public class UnitInfoController : MonoBehaviour
     {
-        GameController.SelectedAObject += RefreshBuildingInfo;
-        _activeButtonList = new List<ProductionButton>();
-    }
+        [SerializeField] private Image buildingImage;
+        [SerializeField] private GameObject productionList;
+        private List<ProductionButton> _activeButtonList;
+        //private GameObject _selectedGo;
+        private void Awake()
+        {
+            GameController.SelectedAObject += RefreshBuildingInfo;
+            _activeButtonList = new List<ProductionButton>();
+        }
 
-    private void RefreshBuildingInfo(object sender, GameController.SelectedAObjectArgs e)
-    {
+      
+
+        private void RefreshBuildingInfo(object sender, GameController.SelectedAObjectArgs e)
+        {
        
-        if (e.SelectedGameObject == null)
-        {
-            _selectedGo = null;
-
-            if (_activeButtonList.Count > 0)
+            if (e.SelectedGameObject == null)
             {
-                foreach (var button in _activeButtonList)
-                {
-                    Destroy(button?.gameObject);
-                }
-                _activeButtonList.Clear();
-            }
+              //  _selectedGo = null;
 
-        }
-        else if(e.SelectedGameObject.GetComponent<Building>())
-        {
+                if (_activeButtonList.Count > 0)
+                {
+                    foreach (var button in _activeButtonList)
+                    {
+                        Destroy(button?.gameObject);
+                    }
+                    _activeButtonList.Clear();
+                }
+
+            }
+            else if(e.SelectedGameObject.GetComponent<Building>())
+            {
            
-            _selectedGo = e.SelectedGameObject;
+               // _selectedGo = e.SelectedGameObject;
 
-            if (_activeButtonList.Count > 0)
-            {
-                foreach (var button in _activeButtonList)
+                if (_activeButtonList.Count > 0)
                 {
-                    Destroy(button?.gameObject);
+                    foreach (var button in _activeButtonList)
+                    {
+                        Destroy(button?.gameObject);
+                    }
+                    _activeButtonList.Clear();
                 }
-                _activeButtonList.Clear();
-            }
 
-            Building selectedBuilding = e.SelectedGameObject.GetComponent<Building>();
-            buildingImage.sprite = selectedBuilding.sprite;
-            if (selectedBuilding.products.Count > 0)
-            {
-                for (int i = 0; i < selectedBuilding.products.Count; i++)
+                Building selectedBuilding = e.SelectedGameObject.GetComponent<Building>();
+                buildingImage.sprite = selectedBuilding.sprite;
+                if (selectedBuilding.products.Count > 0)
                 {
-                    ProductionButton productButton = Instantiate(selectedBuilding.products[i]);
-                    productButton.transform.SetParent(productionList.transform);
-                    _activeButtonList.Add(productButton);
-                    productButton.spawnBuilding=e.SelectedGameObject;
-
-
+                    foreach (var t in selectedBuilding.products)
+                    {
+                        ProductionButton productButton = Instantiate(t, productionList.transform, true);
+                        _activeButtonList.Add(productButton);
+                        productButton.spawnBuilding=e.SelectedGameObject;
+                    }
                 }
-            }
-        }else if (e.SelectedGameObject.GetComponent<Unit>())
-        {
-            _selectedGo = e.SelectedGameObject;
-
-            if (_activeButtonList.Count > 0)
+            }else if (e.SelectedGameObject.GetComponent<PlayableObject>())
             {
-                foreach (var button in _activeButtonList)
+               // _selectedGo = e.SelectedGameObject;
+
+                if (_activeButtonList.Count > 0)
                 {
-                    Destroy(button?.gameObject);
+                    foreach (var button in _activeButtonList)
+                    {
+                        Destroy(button?.gameObject);
+                    }
+                    _activeButtonList.Clear();
                 }
-                _activeButtonList.Clear();
+                buildingImage.sprite = e.SelectedGameObject.GetComponent<Unit>().sprite;
             }
-            buildingImage.sprite = e.SelectedGameObject.GetComponent<Unit>().sprite;
         }
-    }
 
     
+    }
 }

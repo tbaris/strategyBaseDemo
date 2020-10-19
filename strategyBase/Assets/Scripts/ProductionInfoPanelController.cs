@@ -1,29 +1,34 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Serialization;
+﻿using UnityEngine;
 
-public class ProductionInfoPanelController : MonoBehaviour
+namespace Assets.Scripts
 {
-    [SerializeField] private GameObject gameInfoPanel;
-    [FormerlySerializedAs("ProductionInfoPanel")] [SerializeField] private GameObject productionInfoPanel;
-    private void Awake()
+    public class ProductionInfoPanelController : MonoBehaviour
     {
-        GameController.SelectedAObject += SwitchPanel;
-    }
-
-    private void SwitchPanel(object sender, GameController.SelectedAObjectArgs e)
-    {
-        if (e.SelectedGameObject == null)
+        [SerializeField] private GameObject gameInfoPanel;
+        [SerializeField] private GameObject productionInfoPanel;
+        private void Awake()
         {
-            gameInfoPanel.gameObject.SetActive(true);
-            productionInfoPanel.gameObject.SetActive(false);
+            GameController.SelectedAObject += SwitchPanel;
         }
-        else
+
+        private void Start()
         {
-            gameInfoPanel.gameObject.SetActive(false);
-            productionInfoPanel.gameObject.SetActive(true);
+            gameInfoPanel?.gameObject.SetActive(true);
+            productionInfoPanel?.gameObject.SetActive(false);
+        }
+
+        private void SwitchPanel(object sender, GameController.SelectedAObjectArgs e)
+        {
+            if (e.SelectedGameObject == null)
+            {
+                gameInfoPanel.gameObject.SetActive(true);
+                productionInfoPanel.gameObject.SetActive(false);
+            }
+            else
+            {
+                gameInfoPanel.gameObject.SetActive(false);
+                productionInfoPanel.gameObject.SetActive(true);
+            }
         }
     }
 }
