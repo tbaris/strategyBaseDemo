@@ -93,7 +93,7 @@ public class Pathfind : MonoBehaviour
         foreach (GridCell cell in cellList)
         {
 
-            int GCost = CalculateDistance(cell,start);
+            int GCost = CalculateDistance(cell, currentCell) + currentCell.GCost;
             int HCost = CalculateDistance(cell,target);
             int TotalCost = GCost + HCost;
 
@@ -144,7 +144,7 @@ public class Pathfind : MonoBehaviour
 
             }else if (nextCell.TotalCost == testCell.TotalCost)
             {
-                if(nextCell.HCost> testCell.HCost)
+                if(nextCell.HCost > testCell.HCost)
                 {
                    
                     nextCell = testCell;
