@@ -7,18 +7,14 @@ using UnityEngine;
 public abstract class ObjectPooler<TObject> where TObject : Component
 {
     public TObject Prefab;
-   
- //   public  static ObjectPooler<TObject> Instance { get; private set; }
+    
     private  Queue<TObject> _objects = new Queue<TObject>();
 
     
 
-    private void Awake()
-    {
-      //  Instance = this;
-    }
+   
 
-    public virtual TObject Get()
+    public virtual TObject Get()// gets object from pool if there is one in or creates new objcet
     {
         if (Application.isEditor && _objects.Count > 20000)
         {
@@ -38,7 +34,7 @@ public abstract class ObjectPooler<TObject> where TObject : Component
         return _objects.Dequeue();
     }
 
-    private void AddObjects()
+    private void AddObjects()//adds object to pool
     {
         var newObject = GameObject.Instantiate(Prefab);
         newObject.gameObject.SetActive(false);
@@ -47,7 +43,7 @@ public abstract class ObjectPooler<TObject> where TObject : Component
       
     }
 
-    public void ReturnToPool(TObject returnThis)
+    public void ReturnToPool(TObject returnThis)//return given objects an disables it
     {
         returnThis.gameObject.SetActive(false);
         _objects.Enqueue(returnThis);

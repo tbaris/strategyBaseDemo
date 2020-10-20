@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts
 {
+
     public class MovingUnits : PlayableObject
     {
         [SerializeField]private float speed;
@@ -18,7 +20,7 @@ namespace Assets.Scripts
             _nextStop = GridManager.Instance.GetCellAdress(transform.position);
         }
 
-        public override void SetDestination(GridCell target)
+        public override void SetDestination(GridCell target)//sets destination and gets a path to follow
         {
         
         
@@ -31,16 +33,20 @@ namespace Assets.Scripts
             {
                 _pathQueue.Enqueue(path[i]); 
             }
+
         }
 
-        private void Update()
+
+      
+      
+
+        private void Update()//moves unit along to path  ---- extract this to another method 
         {
             if (_nextStop.WorldPos == transform.position)
             {
                 GridManager.Instance.setObjectOnPos(this.gameObject);
                 if (_pathQueue.Count > 0)
                 {
-           
                     _nextStop = _pathQueue.Dequeue();
                     GridManager.Instance.removeObjectOnPos(this.gameObject);
                 }
@@ -51,12 +57,8 @@ namespace Assets.Scripts
                 transform.position = Vector2.MoveTowards(transform.position, _nextStop.WorldPos, speed* Time.deltaTime);
                 
             }
-           
-            
 
-        
         }
 
- 
     }
 }

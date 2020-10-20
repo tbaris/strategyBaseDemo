@@ -33,13 +33,13 @@ namespace Assets.Scripts
 
         void Update()
         {
-            if (currentBuilding != null)
+            if (currentBuilding != null)//if there is a building moves it with mouse pos
             {
                 MoveObjectWithCursor();
             }
         }
 
-        public void SpawnBuilding(GameObject building)
+        public void SpawnBuilding(GameObject building)//spawn build gonna be placed
         {
             if (currentBuilding == null)
             {
@@ -56,7 +56,7 @@ namespace Assets.Scripts
         
         }
 
-        private void MoveObjectWithCursor()
+        private void MoveObjectWithCursor()// move building with cursor and check placement pos availability
         {
             currentBuilding.transform.position = MouseControl.Instance.GetGridPosOfCursor().WorldPos;
             ReturnIndicatorsToPool();
@@ -64,7 +64,7 @@ namespace Assets.Scripts
             IsPlacementFieldEmpty();
         }
 
-        public void CancelBuilding()
+        public void CancelBuilding()//cancels building placement.
         {
             Destroy(currentBuilding);
             ReturnIndicatorsToPool();
@@ -82,7 +82,7 @@ namespace Assets.Scripts
             _activeIndicatorSquares.Clear();
         }
     
-        private bool IsPlacementFieldEmpty()
+        private bool IsPlacementFieldEmpty()//checks placement pos and show pos status with overlaying squares
         {
        
 
@@ -134,7 +134,7 @@ namespace Assets.Scripts
         
         }
 
-        private void FillGridCells()
+        private void FillGridCells()//updates cells status with placed building info
         {
             if (currentBuilding)
             {
@@ -142,7 +142,7 @@ namespace Assets.Scripts
                 GridManager.Instance.setObjectOnPos(currentBuilding);
             }
         }
-        public void PlaceBuilding()
+        public void PlaceBuilding()//places building to mouse pos.
         {
             if (IsPlacementFieldEmpty())
             {

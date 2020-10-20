@@ -14,7 +14,7 @@ namespace Assets.Scripts
         private List<GridCell> _visitedCells;
     
 
-        public List<GridCell> FindPath(GridCell start, GridCell target)
+        public List<GridCell> FindPath(GridCell start, GridCell target)//returns list of gridcells from start to target
         {
             _tempPath = new List<GridCell>();
             _calculatedCells = new List<GridCell>();
@@ -52,7 +52,8 @@ namespace Assets.Scripts
         }
 
 
-        private List<GridCell> MakePathList(GridCell lastCell,GridCell firstCell)
+        private List<GridCell> MakePathList(GridCell lastCell,GridCell firstCell)//when path is found. makes a list starting from last cell and adds its previous cells
+                                                                                 //and returns reversed version of this list
         {
             _tempPath = new List<GridCell>();
             _tempPath.Add(lastCell);
@@ -72,7 +73,7 @@ namespace Assets.Scripts
 
         }
 
-        private List<GridCell> GetNeighborCells(GridCell centerCell)
+        private List<GridCell> GetNeighborCells(GridCell centerCell)//find empty cells connected to given cell
         {
             List<GridCell> neighborCells = new List<GridCell>();
 
@@ -93,7 +94,7 @@ namespace Assets.Scripts
             return neighborCells;
         }
 
-        private void CalculateCosts(List<GridCell> cellList, GridCell target, GridCell currentCell)
+        private void CalculateCosts(List<GridCell> cellList, GridCell target, GridCell currentCell)//calculates path costs of given list of cells
         {
             foreach (GridCell cell in cellList)
             {
@@ -102,7 +103,7 @@ namespace Assets.Scripts
                 int hCost = CalculateDistance(cell,target);
                 int totalCost = gCost + hCost;
 
-                if (totalCost < cell.TotalCost || cell.TotalCost == 0)
+                if (totalCost < cell.TotalCost || cell.TotalCost == 0)// updates cell costs if values better.
                 {
 
                     cell.GCost = gCost;
@@ -125,7 +126,7 @@ namespace Assets.Scripts
         
         }
 
-        private int CalculateDistance(GridCell a, GridCell b)
+        private int CalculateDistance(GridCell a, GridCell b)//returns cell to cell distance
         {
             int xDist = Mathf.Abs(a.GridPos.x - b.GridPos.x);
             int yDist = Mathf.Abs(a.GridPos.y - b.GridPos.y);
@@ -138,7 +139,7 @@ namespace Assets.Scripts
 
         }
 
-        private GridCell FindNextCell()
+        private GridCell FindNextCell()//finds next the lowest path cost from calculated cells list
         {
             GridCell nextCell = new GridCell(true);
             nextCell.TotalCost = Int32.MaxValue;

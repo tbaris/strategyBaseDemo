@@ -51,7 +51,7 @@ public class CameraMove : MonoBehaviour
         }
     }
 
-    private void SetCamLimits(object sender, ScreenResChangeCheck.OnScreenResChangeArgs e)
+    private void SetCamLimits(object sender, ScreenResChangeCheck.OnScreenResChangeArgs e) //calculates camera limits with view size
     {
         float _screenHeight = e.Res.x;
         float _screenWidth = e.Res.y;

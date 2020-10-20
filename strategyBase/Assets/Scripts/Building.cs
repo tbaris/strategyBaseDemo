@@ -10,7 +10,7 @@ namespace Assets.Scripts
 
   
 
-        public void SpawnUnit(GameObject spawnUnit)
+        public void SpawnUnit(GameObject spawnUnit)//spawn units to closest empty cell.
         {
         
             GridCell nearestEmptyCell = GridManager.Instance.GetClosestEmptyPos(

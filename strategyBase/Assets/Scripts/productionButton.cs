@@ -9,7 +9,7 @@ namespace Assets.Scripts
         public GameObject spawnBuilding;
         private void Awake()
         {
-            this.GetComponent<Button>().onClick.AddListener(OrderSpawn);
+            this.GetComponent<Button>().onClick.AddListener(OrderSpawn);//orders its building to spawn this buttons object
         }
 
         private void OrderSpawn()

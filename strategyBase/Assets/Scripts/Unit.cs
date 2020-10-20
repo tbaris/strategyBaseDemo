@@ -2,6 +2,8 @@
 
 namespace Assets.Scripts
 {
+
+    //base unit properties
     public abstract class Unit : MonoBehaviour
     {
         public new string name;

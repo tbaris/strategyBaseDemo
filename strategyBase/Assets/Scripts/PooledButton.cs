@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 namespace Assets.Scripts
 {
+    //pooled menu button behaviour
     public class PooledButton : Button
     {
    
@@ -16,7 +17,7 @@ namespace Assets.Scripts
             this.onClick.AddListener(SendTypeToSpawn);
          }
 
-        private void SendTypeToSpawn()
+        private void SendTypeToSpawn()//if clicked send info to game controller
         {
             GameController.Instance.StartBuilding(building);
         }

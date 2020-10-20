@@ -18,7 +18,7 @@ namespace Assets.Scripts
 
       
 
-        private void RefreshBuildingInfo(object sender, GameController.SelectedAObjectArgs e)
+        private void RefreshBuildingInfo(object sender, GameController.SelectedAObjectArgs e)// sets info panels sprite and buttons for selected unit
         {
        
             if (e.SelectedGameObject == null)

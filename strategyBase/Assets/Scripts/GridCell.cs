@@ -2,6 +2,7 @@
 
 namespace Assets.Scripts
 {
+    //class for cell props.
     public class GridCell 
     {
         public Vector3 WorldPos;

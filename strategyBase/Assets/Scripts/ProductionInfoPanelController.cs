@@ -17,7 +17,7 @@ namespace Assets.Scripts
             productionInfoPanel?.gameObject.SetActive(false);
         }
 
-        private void SwitchPanel(object sender, GameController.SelectedAObjectArgs e)
+        private void SwitchPanel(object sender, GameController.SelectedAObjectArgs e)//switches between panels when a cell clicked 
         {
             if (e.SelectedGameObject == null)
             {

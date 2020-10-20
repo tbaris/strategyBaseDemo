@@ -37,8 +37,8 @@ namespace Assets.Scripts
                 Instance = this;
             }
 
-            _grid = new GridManager(_gridSize.x, _gridSize.y, cellSize,borderLineWitdh);
-            foreach (GridCell cell in GridManager.Instance.GridCells)
+            _grid = new GridManager(_gridSize.x, _gridSize.y, cellSize,borderLineWitdh);//Create grid with given parameters
+            foreach (GridCell cell in GridManager.Instance.GridCells) // Set nodes sprite 
             {
                 if (cell.IsGround)
                 {
@@ -54,14 +54,14 @@ namespace Assets.Scripts
 
         }
 
-        public void OnLeftClick()
+        public void OnLeftClick() 
         {
-            if (PlaceBuildings.Instance.currentBuilding != null)
+            if (PlaceBuildings.Instance.currentBuilding != null) // if there is a building on pointer try to place building on clicked pos.
             {
                 PlaceBuildings.Instance.PlaceBuilding();
             }
 
-            if (MouseControl.Instance.GetGridPosOfCursor() != null)
+            if (MouseControl.Instance.GetGridPosOfCursor() != null) //if there is an playable object on clicked pos, set object as selected and call for event
             {
                 _selectedGo = MouseControl.Instance.GetGridPosOfCursor().GameObjectOnPos;
                 SelectedAObject?.Invoke(this, new SelectedAObjectArgs { SelectedGameObject = _selectedGo });
@@ -72,33 +72,36 @@ namespace Assets.Scripts
         }
         public void OnRightClick()
         {
-            if (PlaceBuildings.Instance.currentBuilding != null)
+            if (PlaceBuildings.Instance.currentBuilding != null)// if there is a building on pointer cancel placement
             {
                 PlaceBuildings.Instance.CancelBuilding();
             }
 
             if (_selectedGo != null)
             {
-                if (_selectedGo.GetComponent<PlayableObject>())
+                if (_selectedGo.GetComponent<PlayableObject>()
+                ) //if there is a selected object and if this object is a playable object
                 {
-                    _selectedGo.GetComponent<PlayableObject>().SetDestination(MouseControl.Instance.GetGridPosOfCursor());
+
+                    _selectedGo.GetComponent<PlayableObject>()
+                        .SetDestination(MouseControl.Instance
+                            .GetGridPosOfCursor()); //set objects destination to mouse pos.
                 }
-            
             }
         }
-        public void OnMiddleClick()
+        public void OnMiddleClick()//Gonna add some other func. later
         {
             Debug.Log("middle");
         }
 
-        public void StartBuilding(GameObject building)
+        public void StartBuilding(GameObject building)//start to place giving building
         {
 
             PlaceBuildings.Instance.SpawnBuilding(building);
         }
   
 
-        private void OnDrawGizmos()
+        private void OnDrawGizmos()//show grid cell status on edit
         {
             if (_grid != null)
             {

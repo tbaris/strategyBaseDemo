@@ -31,7 +31,7 @@ namespace Assets.Scripts
             _buttonTable = new SortedDictionary<int, List<PooledButton>>();
             _menuPoolList = new List<BuildingMenuPool>();
         
-            if (pooledMenuButtons.Count > 0)
+            if (pooledMenuButtons.Count > 0) //if there is a given buttons create pools for this buttons
             {
                 foreach (var button in pooledMenuButtons)
                 { 
@@ -40,36 +40,29 @@ namespace Assets.Scripts
 
                 }
             }
-            else {DestroyImmediate(this);}
+           // else {DestroyImmediate(this);}
 
-            _resolution = new Vector2(Screen.width, Screen.height);
-            _thisScrollRect = GetComponent<ScrollRect>();
+            _resolution = new Vector2(Screen.width, Screen.height); // get res to set sizes
+            _thisScrollRect = GetComponent<ScrollRect>(); 
             _thisScrollRect.onValueChanged.AddListener(SliderMoved);
-
 
             _contentHolderRect = _thisScrollRect.content;
 
 
-            ScreenResChangeCheck.OnScreenResChange += ScreenResChangeCheck_OnScreenResChange;
-
         }
 
-        private void ScreenResChangeCheck_OnScreenResChange(object sender, ScreenResChangeCheck.OnScreenResChangeArgs e)
-        {
-       
-       
-        }
+      
 
 
         private void Start()
         {
-            CalculateDimensions();
+            CalculateDimensions(); 
             PlaceMenuButtons(_rows);
             CheckUpAndDownRowLimit();
 
         }
 
-        private void CalculateDimensions()
+        private void CalculateDimensions()// set sizes for buttons 
         {
             float scrollWidth  = _thisScrollRect.gameObject.GetComponent<RectTransform>().sizeDelta.x;
             float scrollHeight = _resolution.y;
@@ -85,7 +78,7 @@ namespace Assets.Scripts
         }
 
 
-        private void PlaceMenuButtons(int rows)
+        private void PlaceMenuButtons(int rows)// place rows of buttons 
         {
             int buttonTypeIndex = 0;
 
@@ -97,7 +90,7 @@ namespace Assets.Scripts
         }
 
 
-        private List<PooledButton> GetRow(int row,int poolIndex)
+        private List<PooledButton> GetRow(int row,int poolIndex) // return a row of buttons
         {
             List<PooledButton> buttonRow = new List<PooledButton>();
             for (int j = 0; j < desiredColumnCount; j++)
@@ -112,7 +105,7 @@ namespace Assets.Scripts
             return buttonRow;
         }
 
-        private PooledButton PlaceButton(int i, int j,BuildingMenuPool pool)
+        private PooledButton PlaceButton(int i, int j,BuildingMenuPool pool)//returns a button 
         {
             PooledButton pooledButton = pool.Get();
 
@@ -135,28 +128,28 @@ namespace Assets.Scripts
     
 
 
-        private void CheckUpAndDownRowLimit()
+        private void CheckUpAndDownRowLimit() // request to add row of buttons or returns row of buttons on slider movement 
         {
             GetTopAndBottomButtons();
 
 
-            while (_bottomButtons.transform.position.y > -_resolution.y / 2)
+            while (_bottomButtons.transform.position.y > -_resolution.y / 2) // if the row on the bottom is too close to screen view adds another row to bottom
             {
                 AddRow(_bottomIndex - 1, _menuPoolList.IndexOf(_buttonTable[_bottomIndex][desiredColumnCount - 1].MyPool) + 1);
                 GetTopAndBottomButtons();
             }
 
-            while (_topButtons.transform.position.y < _resolution.y * 1.5f)
+            while (_topButtons.transform.position.y < _resolution.y * 1.5f)// if the row on the top is too close to screen view adds another row to top
             {
                 AddRow(_topIndex + 1, _menuPoolList.IndexOf(_buttonTable[_topIndex][desiredColumnCount - 1].MyPool) + 1);
                 GetTopAndBottomButtons();
             }
-            while (_topButtons.transform.position.y > _resolution.y * 2)
+            while (_topButtons.transform.position.y > _resolution.y * 2)// if a row is too high from screen view returns this row to pool and adds a row to bottom
             {
                 ReturnRowToPool(_topIndex);
                 GetTopAndBottomButtons();
             }
-            while (_bottomButtons.transform.position.y < -_resolution.y)
+            while (_bottomButtons.transform.position.y < -_resolution.y)// if a row is too low from screen view returns this row to pool and adds a row to top
             {
                 ReturnRowToPool(_bottomIndex);
                 GetTopAndBottomButtons();
@@ -165,7 +158,7 @@ namespace Assets.Scripts
 
         }
 
-        private void GetTopAndBottomButtons()
+        private void GetTopAndBottomButtons()//sets rows on top and bottom
         {
         
             _bottomIndex = _buttonTable.ElementAt(0).Key;
@@ -174,13 +167,13 @@ namespace Assets.Scripts
             _topButtons = _buttonTable[_topIndex][0];
         }
 
-        private void AddRow(int row,int buttonPool)
+        private void AddRow(int row,int buttonPool)//request a row of buttons
         {
         
             _buttonTable.Add(row, GetRow(row, buttonPool));
         }
 
-        private void ReturnRowToPool(int row)
+        private void ReturnRowToPool(int row) //calls a row of button to return their own pools.
         {
        
             foreach (PooledButton button in _buttonTable[row])

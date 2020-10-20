@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class ScreenResChangeCheck : MonoBehaviour
 {
+    //class to check screen res change and fires an event on change
     public class OnScreenResChangeArgs : EventArgs
     {
         public Vector2 Res;
