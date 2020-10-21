@@ -24,6 +24,19 @@ namespace Assets.Scripts
                     transform.position.z));
             flagInstance = Instantiate(_flag, _spawnTarget.WorldPos, Quaternion.identity);
             isActive = true;
+            GameController.SelectedAObject += switchFlagOnOff;
+        }
+
+        private void switchFlagOnOff(object sender, GameController.SelectedAObjectArgs e)
+        {
+            if (e.SelectedGameObject == this.gameObject)
+            {
+                flagInstance.SetActive(true);
+            }
+            else
+            {
+                flagInstance.SetActive(false);
+            }
         }
 
         public void SpawnUnit(GameObject spawnUnit) //spawn units to closest empty cell.

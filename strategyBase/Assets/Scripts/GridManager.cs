@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -254,6 +255,36 @@ namespace Assets.Scripts
             }
 
             return closestCell;
+
+
+        }
+        public GridCell GetClosestEmptyPosFromList(GridCell target, List<GridCell> cellList)
+        {
+            float closestCellDistance = Int32.MaxValue;
+            GridCell closestCell = cellList[0];
+
+            foreach (GridCell cell in cellList)
+            {
+                if (IsCellEmpty(cell))
+                {
+                    float distance = (cell.WorldPos - target.WorldPos).magnitude;
+                    if (distance < closestCellDistance && cell.GridPos != Vector2Int.zero)
+                    {
+                        closestCell = cell;
+                        closestCellDistance = distance;
+
+                    }
+
+                }
+
+            }
+
+            if (IsCellEmpty(closestCell))
+            {
+                return closestCell;
+            }
+
+            return cellList[0];
 
 
         }

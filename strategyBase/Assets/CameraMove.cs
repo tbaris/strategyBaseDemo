@@ -39,6 +39,7 @@ public class CameraMove : MonoBehaviour
         _resolution = new Vector2(Screen.height, Screen.width);
         _gridUpRightCorner = GridManager.Instance.gridUpRightCorner;
         SetCamLimits(this, new OnScreenResChangeArgs { Res = _resolution });
+        MoveCamera();
     }
 
     void Update()

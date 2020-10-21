@@ -53,6 +53,7 @@ namespace Assets.Scripts
 
         }
 
+
         private void StartMove()
         {
             GridManager.Instance.removeObjectOnCell(this.gameObject, _currentCell);

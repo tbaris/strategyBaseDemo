@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -15,6 +16,9 @@ namespace Assets.Scripts
         private GridCell[,]  _gridCells;
     
 
+
+        
+
         public List<GridCell> FindPath(GridCell start, GridCell target)//returns list of grid cells from start to target
         {
             
@@ -26,8 +30,10 @@ namespace Assets.Scripts
             _visitedCells = new List<GridCell>();
             start = _gridCells[start.GridPos.x, start.GridPos.y];
             GridCell currentCell = start;
+
             start.IsVisited = true;
             _visitedCells.Add(start);
+          
             int whileKillLimit = 0;
             bool isAnyCellLeft = true;
 
@@ -35,7 +41,7 @@ namespace Assets.Scripts
             {
                 target = GridManager.Instance.GetClosestEmptyPos(target.WorldPos);
             }
-
+            
             while (currentCell != target && whileKillLimit < 10000 && isAnyCellLeft)
             {
 
@@ -45,10 +51,12 @@ namespace Assets.Scripts
 
                 _calculatedCells.Remove(currentCell);
                 currentCell.IsVisited = true;
+             
                 _visitedCells.Add(currentCell);
 
                 whileKillLimit++;
             }
+           
 
            
 
@@ -56,6 +64,17 @@ namespace Assets.Scripts
             if (currentCell == target)
             {
                 return MakePathList(currentCell, start);
+            }
+            else
+            {
+                if (_visitedCells.Count > 0)
+                {
+                   
+                    GridCell closestInVisited =
+                        GridManager.Instance.GetClosestEmptyPosFromList(target, _visitedCells);
+                 
+                    return MakePathList(closestInVisited, start);
+                }
             }
             
 
@@ -82,12 +101,14 @@ namespace Assets.Scripts
             _tempPath = new List<GridCell>();
             _tempPath.Add(lastCell);
             int whileKillLimit = 0;
-            while (lastCell != firstCell && whileKillLimit<100)
+           
+            while (lastCell != firstCell && whileKillLimit<1000)
             {
 
                 _tempPath.Add(lastCell.PreviousCell);
                 lastCell = lastCell.PreviousCell;
                 whileKillLimit++;
+               
             }
 
             _tempPath.Add(lastCell);
@@ -188,6 +209,7 @@ namespace Assets.Scripts
                 }
             }
 
+            
             return nextCell;
         }
 

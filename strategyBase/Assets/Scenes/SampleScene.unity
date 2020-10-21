@@ -588,7 +588,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gridSize: {x: 80, y: 40}
   cellSize: 1
-  borderLineWitdh: 5
+  borderLineWitdh: 15
   grassTile: {fileID: 8152004115745622122, guid: 5de5e1c43b55a34448f65904a849cf35,
     type: 3}
   waterTile: {fileID: 7762388767299443706, guid: 4a464a22c33319f4ab3648285eec5c9a,
