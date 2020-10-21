@@ -1,14 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class PooledObject : MonoBehaviour
+namespace Assets.Scripts
 {
-
-    public GameObjectPool MyPool;
-
-    public void ReturnToPool()
+    public class PooledObject : MonoBehaviour
     {
-        MyPool.ReturnToPool(this);
+
+        public GameObjectPool MyPool;
+
+        public void ReturnToPool()
+        {
+            MyPool.ReturnToPool(this);
+        }
     }
 }

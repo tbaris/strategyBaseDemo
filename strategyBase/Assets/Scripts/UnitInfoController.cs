@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,8 +7,9 @@ namespace Assets.Scripts
 {
     public class UnitInfoController : MonoBehaviour
     {
-        [SerializeField] private Image buildingImage;
+        [SerializeField] private Image selectedUnitImage;
         [SerializeField] private GameObject productionList;
+        [SerializeField] private TextMeshProUGUI selectedUnitName;
         private List<ProductionButton> _activeButtonList;
         //private GameObject _selectedGo;
         private void Awake()
@@ -35,7 +37,7 @@ namespace Assets.Scripts
                 }
 
             }
-            else if(e.SelectedGameObject.GetComponent<Building>())
+            else if(e.SelectedGameObject.GetComponent<PlayableObject>())
             {
            
                // _selectedGo = e.SelectedGameObject;
@@ -49,21 +51,21 @@ namespace Assets.Scripts
                     _activeButtonList.Clear();
                 }
 
-                Building selectedBuilding = e.SelectedGameObject.GetComponent<Building>();
-                buildingImage.sprite = selectedBuilding.sprite;
-                if (selectedBuilding.products.Count > 0)
+                Unit selectedUnit= e.SelectedGameObject.GetComponent<Unit>();
+                selectedUnitImage.sprite = selectedUnit.sprite;
+                selectedUnitName.text  = selectedUnit.name;
+                if (selectedUnit.GetComponent<Building>() && selectedUnit.GetComponent<Building>().products.Count > 0)
                 {
-                    foreach (var t in selectedBuilding.products)
+                    foreach (var t in selectedUnit.GetComponent<Building>().products)
                     {
                         ProductionButton productButton = Instantiate(t, productionList.transform, true);
                         _activeButtonList.Add(productButton);
                         productButton.spawnBuilding=e.SelectedGameObject;
                     }
                 }
-            }else if (e.SelectedGameObject.GetComponent<PlayableObject>())
+            }
+            else
             {
-               // _selectedGo = e.SelectedGameObject;
-
                 if (_activeButtonList.Count > 0)
                 {
                     foreach (var button in _activeButtonList)
@@ -72,7 +74,6 @@ namespace Assets.Scripts
                     }
                     _activeButtonList.Clear();
                 }
-                buildingImage.sprite = e.SelectedGameObject.GetComponent<Unit>().sprite;
             }
         }
 

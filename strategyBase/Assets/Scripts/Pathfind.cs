@@ -12,19 +12,29 @@ namespace Assets.Scripts
         private List<GridCell> _tempPath;
         private List<GridCell> _calculatedCells;
         private List<GridCell> _visitedCells;
+        private GridCell[,]  _gridCells;
     
 
-        public List<GridCell> FindPath(GridCell start, GridCell target)//returns list of gridcells from start to target
+        public List<GridCell> FindPath(GridCell start, GridCell target)//returns list of grid cells from start to target
         {
+            
+
+            _gridCells = cloneGrid(GridManager.Instance.GridCells);
+            GridManager.Instance.ResetPathfindData(_gridCells);
             _tempPath = new List<GridCell>();
             _calculatedCells = new List<GridCell>();
             _visitedCells = new List<GridCell>();
+            start = _gridCells[start.GridPos.x, start.GridPos.y];
             GridCell currentCell = start;
+            start.IsVisited = true;
             _visitedCells.Add(start);
             int whileKillLimit = 0;
             bool isAnyCellLeft = true;
 
-            
+            if (!GridManager.Instance.IsCellEmpty(target))
+            {
+                target = GridManager.Instance.GetClosestEmptyPos(target.WorldPos);
+            }
 
             while (currentCell != target && whileKillLimit < 10000 && isAnyCellLeft)
             {
@@ -34,21 +44,35 @@ namespace Assets.Scripts
                 currentCell = FindNextCell();
 
                 _calculatedCells.Remove(currentCell);
+                currentCell.IsVisited = true;
                 _visitedCells.Add(currentCell);
 
                 whileKillLimit++;
             }
-            Debug.Log("No Path found \n" + whileKillLimit +"  "+ _calculatedCells.Count +"  "+ _visitedCells.Count);
 
+           
 
 
             if (currentCell == target)
             {
                 return MakePathList(currentCell, start);
             }
-            GridManager.Instance.ResetPathfindData();
+            
 
             return null;
+           
+        }
+
+        private GridCell[,] cloneGrid(GridCell[,] gridTable)
+        {
+              _gridCells = new GridCell[gridTable.GetLength(0), gridTable.GetLength(1)];
+             foreach (GridCell cell in gridTable)
+             {
+                 GridCell newCell = cell;
+                 _gridCells[cell.GridPos.x, cell.GridPos.y] = newCell;
+             }
+
+             return _gridCells;
         }
 
 
@@ -65,10 +89,10 @@ namespace Assets.Scripts
                 lastCell = lastCell.PreviousCell;
                 whileKillLimit++;
             }
-            Debug.Log(whileKillLimit);
+
             _tempPath.Add(lastCell);
             _tempPath.Reverse();
-            GridManager.Instance.ResetPathfindData();
+            GridManager.Instance.ResetPathfindData(_gridCells);
             return _tempPath;
 
         }
@@ -83,9 +107,9 @@ namespace Assets.Scripts
                 {
                     if (!(i == 0 && j == 0))
                     {
-                        if (GridManager.Instance.IsCellEmpty(centerCell.GridPos.x + i, centerCell.GridPos.y + j))
+                        if (GridManager.Instance.IsCellEmpty(centerCell.GridPos.x + i, centerCell.GridPos.y + j,_gridCells))
                         {
-                            neighborCells.Add(GridManager.Instance.GridCells[centerCell.GridPos.x + i, centerCell.GridPos.y + j]);
+                            neighborCells.Add(_gridCells[centerCell.GridPos.x + i, centerCell.GridPos.y + j]);
                         }
                     }
                 }
@@ -98,29 +122,30 @@ namespace Assets.Scripts
         {
             foreach (GridCell cell in cellList)
             {
-
-                int gCost = CalculateDistance(cell, currentCell) + currentCell.GCost;
-                int hCost = CalculateDistance(cell,target);
-                int totalCost = gCost + hCost;
-
-                if (totalCost < cell.TotalCost || cell.TotalCost == 0)// updates cell costs if values better.
+                if (!cell.IsVisited)
                 {
+                 
+                    int gCost = CalculateDistance(cell, currentCell) + currentCell.GCost;
+                    int hCost = CalculateDistance(cell, target);
+                    int totalCost = gCost + hCost;
 
-                    cell.GCost = gCost;
-                    cell.HCost = hCost;
-                    cell.TotalCost = totalCost;
-                    cell.PreviousCell = currentCell;
+                    if (totalCost < cell.TotalCost || cell.TotalCost == 0) // updates cell costs if values better.
+                    {
 
-                }
+                        cell.GCost = gCost;
+                        cell.HCost = hCost;
+                        cell.TotalCost = totalCost;
+                        cell.PreviousCell = currentCell;
 
-                if (!_calculatedCells.Contains(cell)&&!_visitedCells.Contains(cell))
-                {
-                    _calculatedCells.Add(cell);
-                    Debug.Log("add" + "  "+ cell.GridPos);
-                }
-                else
-                {
-                    Debug.Log("not add" + "  " + cell.GridPos);
+                    }
+
+                    if (!cell.IsCalculated)
+                    {
+                        
+                        _calculatedCells.Add(cell);
+                        cell.IsCalculated = true;
+                    }
+                   
                 }
             }
         

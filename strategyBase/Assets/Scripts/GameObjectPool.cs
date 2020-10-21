@@ -1,22 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Build.Content;
-using UnityEngine;
+﻿
 
-
-public class GameObjectPool : ObjectPooler<PooledObject>
+namespace Assets.Scripts
 {
-
-    //pool class for other objects
-
-    public GameObjectPool(PooledObject poolingObject)
+    public class GameObjectPool : ObjectPooler<PooledObject>
     {
-        Prefab = poolingObject;
 
-    }
+        //pool class for other objects
+
+        public GameObjectPool(PooledObject poolingObject)
+        {
+            Prefab = poolingObject;
+
+        }
 
     
 
 
 
+    }
 }

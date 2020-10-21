@@ -8,7 +8,7 @@ namespace Assets.Scripts
 
         [SerializeField]private int _health;
 
-        private GridCell _targetCell;
+        private protected GridCell _targetCell;
 
         public virtual void SetDestination(GridCell target)
         {

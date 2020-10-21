@@ -148,7 +148,7 @@ namespace Assets.Scripts
             {
                 FillGridCells();
                 ReturnIndicatorsToPool();
-                _currentBuildingInfo.isActive = true;
+                _currentBuildingInfo.setActive();
                 currentBuilding = null;
             }
         }

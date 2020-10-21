@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -16,6 +14,7 @@ public abstract class ObjectPooler<TObject> where TObject : Component
 
     public virtual TObject Get()// gets object from pool if there is one in or creates new objcet
     {
+        /*
         if (Application.isEditor && _objects.Count > 20000)
         {
             
@@ -23,7 +22,8 @@ public abstract class ObjectPooler<TObject> where TObject : Component
             EditorApplication.isPaused = true;
             
 
-        }
+        }*/
+
         if (_objects.Count == 0)
         {
             AddObjects();

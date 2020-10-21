@@ -17,6 +17,8 @@ namespace Assets.Scripts
         public int HCost = 0;
         public int TotalCost = 0;
         public GridCell PreviousCell;
+        public bool IsVisited = false;
+        public bool IsCalculated = false;
 
         public GridCell(bool _isGround)
         {
