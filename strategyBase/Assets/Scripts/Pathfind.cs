@@ -56,28 +56,21 @@ namespace Assets.Scripts
 
                 whileKillLimit++;
             }
-           
-
-           
 
 
             if (currentCell == target)
             {
                 return MakePathList(currentCell, start);
+               
             }
-            else
+            else if (_visitedCells.Count > 0)
             {
-                if (_visitedCells.Count > 0)
-                {
-                   
-                    GridCell closestInVisited =
-                        GridManager.Instance.GetClosestEmptyPosFromList(target, _visitedCells);
-                 
-                    return MakePathList(closestInVisited, start);
-                }
+               
+                GridCell closestInVisited = GridManager.Instance.GetClosestEmptyPosFromList(target, _visitedCells);
+                return MakePathList(closestInVisited, start);
             }
             
-
+            
             return null;
            
         }
@@ -95,23 +88,28 @@ namespace Assets.Scripts
         }
 
 
-        private List<GridCell> MakePathList(GridCell lastCell,GridCell firstCell)//when path is found. makes a list starting from last cell and adds its previous cells
+        private List<GridCell> MakePathList(GridCell lastCell,GridCell start)//when path is found. makes a list starting from last cell and adds its previous cells
                                                                                  //and returns reversed version of this list
         {
-            _tempPath = new List<GridCell>();
-            _tempPath.Add(lastCell);
-            int whileKillLimit = 0;
-           
-            while (lastCell != firstCell && whileKillLimit<1000)
-            {
 
-                _tempPath.Add(lastCell.PreviousCell);
-                lastCell = lastCell.PreviousCell;
+            _tempPath = new List<GridCell>();
+            
+            int whileKillLimit = 0;
+
+            _tempPath.Add(GridManager.Instance.GridCells[lastCell.GridPos.x,lastCell.GridPos.y]);
+            while (lastCell != start && whileKillLimit<1000)
+            {
+               // Debug.Log(lastCell.GridPos + "  -  " +lastCell.PreviousCell.GridPos);
+               if (lastCell.PreviousCell != start)
+               {
+                   _tempPath.Add(GridManager.Instance.GridCells[lastCell.PreviousCell.GridPos.x, lastCell.PreviousCell.GridPos.y]);
+               }
+
+               lastCell = lastCell.PreviousCell;
                 whileKillLimit++;
                
             }
 
-            _tempPath.Add(lastCell);
             _tempPath.Reverse();
             GridManager.Instance.ResetPathfindData(_gridCells);
             return _tempPath;

@@ -61,7 +61,7 @@ namespace Assets.Scripts
                 PlaceBuildings.Instance.PlaceBuilding();
             }
 
-            if (MouseControl.Instance.GetGridPosOfCursor() != null) //if there is an playable object on clicked pos, set object as selected and call for event
+            else if (MouseControl.Instance.GetGridPosOfCursor() != null) //if there is an playable object on clicked pos, set object as selected and call for event
             {
                 _selectedGo = MouseControl.Instance.GetGridPosOfCursor().GameObjectOnPos;
                 SelectedAObject?.Invoke(this, new SelectedAObjectArgs { SelectedGameObject = _selectedGo });
@@ -75,6 +75,7 @@ namespace Assets.Scripts
             if (PlaceBuildings.Instance.currentBuilding != null)// if there is a building on pointer cancel placement
             {
                 PlaceBuildings.Instance.CancelBuilding();
+                
             }
 
             if (_selectedGo != null)

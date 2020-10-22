@@ -33,11 +33,12 @@ namespace Assets.Scripts
 
         void Update()
         {
-            if (currentBuilding != null)//if there is a building moves it with mouse pos
+            if (currentBuilding != null && (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0))//if there is a building moves it with mouse pos
             {
                 MoveObjectWithCursor();
             }
         }
+        
 
         public void SpawnBuilding(GameObject building)//spawn build gonna be placed
         {
@@ -60,22 +61,27 @@ namespace Assets.Scripts
         {
             currentBuilding.transform.position = MouseControl.Instance.GetGridPosOfCursor().WorldPos;
             ReturnIndicatorsToPool();
-        
             IsPlacementFieldEmpty();
         }
 
         public void CancelBuilding()//cancels building placement.
         {
             Destroy(currentBuilding);
+            currentBuilding = null;
             ReturnIndicatorsToPool();
+           
+           
         }
 
         private void ReturnIndicatorsToPool()
         {
+            Debug.Log("1");
             if (_activeIndicatorSquares.Count > 0)
             {
+                Debug.Log("2");
                 foreach (PooledObject square in _activeIndicatorSquares)
                 {
+                    Debug.Log("3");
                     square.ReturnToPool();
                 }
             }

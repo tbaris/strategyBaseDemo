@@ -101,7 +101,9 @@ namespace Assets.Scripts
                 {
                     for (int j = 0; j < bSize.y; j++)
                     {
+
                         GridCell cellAtCoord = GetCellAdress(go.transform.position);
+
                         cellAtCoord = GridManager.Instance.GridCells[cellAtCoord.GridPos.x + i, cellAtCoord.GridPos.y + j];
                         cellAtCoord.GameObjectOnPos = go.gameObject;
                         cellAtCoord.IsEmpty = false;
@@ -113,18 +115,18 @@ namespace Assets.Scripts
 
         }
 
-        public bool canMoveObjectToCell(GameObject go, GridCell from, GridCell to)
+        public bool canMoveObjectToCell(GameObject go, GridCell to)
         {
+            
             if (IsCellEmpty(to))
             {
+                
                 setObjectOnCell(go, to);
-                removeObjectOnCell(go, from);
                 return true;
             }
-            else
-            {
-                return false;
-            }
+
+            return false;
+            
         }
 
         private void setObjectOnCell(GameObject go, GridCell cell)
@@ -166,8 +168,7 @@ namespace Assets.Scripts
                         cellAtCoord = GridManager.Instance.GridCells[cellAtCoord.GridPos.x + i, cellAtCoord.GridPos.y + j];
                         cellAtCoord.GameObjectOnPos = null;
                         cellAtCoord.IsEmpty = true;
-
-
+                        
                     }
                 }
             }
@@ -175,10 +176,8 @@ namespace Assets.Scripts
         }
         public void removeObjectOnCell(GameObject go, GridCell cell)
         {
-
             if (go.GetComponent<PlayableObject>())
             {
-
                 Vector2Int bSize = go.GetComponent<PlayableObject>().BaseSize;
                 for (int i = 0; i < bSize.x; i++)
                 {
@@ -188,8 +187,6 @@ namespace Assets.Scripts
                         cellAtCoord = GridManager.Instance.GridCells[cellAtCoord.GridPos.x + i, cellAtCoord.GridPos.y + j];
                         cellAtCoord.GameObjectOnPos = null;
                         cellAtCoord.IsEmpty = true;
-
-
                     }
                 }
             }

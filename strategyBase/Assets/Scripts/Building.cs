@@ -13,23 +13,21 @@ namespace Assets.Scripts
         private GridCell _spawnTarget;
         [SerializeField] private GameObject _flag;
         private GameObject flagInstance;
+        private bool _isSpawnTargetActive = false;
 
 
       
 
         public void setActive()
         {
-            _spawnTarget = GridManager.Instance.GetClosestEmptyPos(
-                new Vector3(transform.position.x + BaseSize.x / 2, transform.position.y + BaseSize.y / 2,
-                    transform.position.z));
-            flagInstance = Instantiate(_flag, _spawnTarget.WorldPos, Quaternion.identity);
-            isActive = true;
             GameController.SelectedAObject += switchFlagOnOff;
+            flagInstance = Instantiate(_flag, transform.position, Quaternion.identity);
+            flagInstance.SetActive(false);
         }
 
         private void switchFlagOnOff(object sender, GameController.SelectedAObjectArgs e)
         {
-            if (e.SelectedGameObject == this.gameObject)
+            if (e.SelectedGameObject == this.gameObject && _isSpawnTargetActive)
             {
                 flagInstance.SetActive(true);
             }
@@ -50,19 +48,11 @@ namespace Assets.Scripts
             Vector3 spawnPos = GridManager.Instance.GetWorldPos(nearestEmptyCell);
 
             GameObject unit = Instantiate(spawnUnit.gameObject, spawnPos, Quaternion.identity);
-            GridManager.Instance.setObjectOnPos(unit);
-            if (nearestEmptyCell != _spawnTarget)
+            GridManager.Instance.canMoveObjectToCell(unit, nearestEmptyCell);
+            
+            if (_isSpawnTargetActive && nearestEmptyCell != _spawnTarget)
             {
-                if (GridManager.Instance.IsCellEmpty(_spawnTarget))
-                {
-                    unit.GetComponent<MovingUnits>().SetDestination(_spawnTarget);
-                }
-                else
-                {
-                    unit.GetComponent<MovingUnits>().SetDestination(GridManager.Instance.GetClosestEmptyPos(_spawnTarget.WorldPos));
-                }
-                    
-                       
+                unit.GetComponent<MovingUnits>().SetDestination(_spawnTarget);
             }
 
         }
@@ -72,15 +62,21 @@ namespace Assets.Scripts
 
 
             base.SetDestination(target);
-
-           
+            
             if (GridManager.Instance.IsCellEmpty(target))
             {
                 _spawnTarget = target;
+                _isSpawnTargetActive = true;
+                flagInstance.SetActive(true);
                 flagInstance.transform.position = _spawnTarget.WorldPos;
             }
 
             
+        }
+
+        private void OnDestroy()
+        {
+            GameController.SelectedAObject -= switchFlagOnOff;
         }
     }
 }
