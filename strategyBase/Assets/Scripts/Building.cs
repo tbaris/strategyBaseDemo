@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -16,7 +17,8 @@ namespace Assets.Scripts
         private bool _isSpawnTargetActive = false;
 
 
-      
+        
+        
 
         public void setActive()
         {
@@ -48,13 +50,19 @@ namespace Assets.Scripts
             Vector3 spawnPos = GridManager.Instance.GetWorldPos(nearestEmptyCell);
 
             GameObject unit = Instantiate(spawnUnit.gameObject, spawnPos, Quaternion.identity);
-            GridManager.Instance.canMoveObjectToCell(unit, nearestEmptyCell);
+            unit.GetComponent<Unit>().enabled = true;
             
             if (_isSpawnTargetActive && nearestEmptyCell != _spawnTarget)
             {
-                unit.GetComponent<MovingUnits>().SetDestination(_spawnTarget);
+                StartCoroutine(_setSpawnTarget(unit, _spawnTarget));
             }
+            
+        }
 
+        private IEnumerator _setSpawnTarget(GameObject spawnUnit, GridCell spawnTarget)
+        {
+            yield return new WaitForEndOfFrame();
+            spawnUnit.GetComponent<MovingUnits>().SetDestination(spawnTarget);
         }
 
         public override void SetDestination(GridCell target) //sets destination and gets a path to follow

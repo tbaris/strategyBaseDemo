@@ -16,6 +16,7 @@ namespace Assets.Scripts
         [SerializeField] private GameObject grassTile;
 
         public GridCell[,] GridCells;
+        private Dictionary<Unit,GridCell> _unitsOnGrid;
 
         public Vector2 gridUpRightCorner { get; private set; }
 
@@ -27,6 +28,8 @@ namespace Assets.Scripts
                 return;
             }
             Instance = this;
+
+            _unitsOnGrid = new Dictionary<Unit, GridCell>();
 
             _columns = col + borderLine * 2;
             _rows = row + borderLine * 2;
@@ -55,6 +58,21 @@ namespace Assets.Scripts
                 }
             }
 
+        }
+
+        public bool AddGoOnGrid(Unit go)
+        {
+            GridCell goCellAdress = GetCellAdress(go.transform.position);
+            if (IsCellEmpty(goCellAdress) && !_unitsOnGrid.ContainsKey(go))
+            {
+                _unitsOnGrid.Add(go,goCellAdress);
+                setObjectOnPos(go);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public bool IsCellEmpty(GridCell cell)
@@ -90,46 +108,45 @@ namespace Assets.Scripts
 
 
 
-        public void setObjectOnPos(GameObject go)
+        private void setObjectOnPos(Unit go)
         {
 
-            if (go.GetComponent<PlayableObject>())
+
+            Vector2Int bSize = go.GetComponent<PlayableObject>().BaseSize;
+            for (int i = 0; i < bSize.x; i++)
             {
-
-                Vector2Int bSize = go.GetComponent<PlayableObject>().BaseSize;
-                for (int i = 0; i < bSize.x; i++)
+                for (int j = 0; j < bSize.y; j++)
                 {
-                    for (int j = 0; j < bSize.y; j++)
-                    {
 
-                        GridCell cellAtCoord = GetCellAdress(go.transform.position);
+                    GridCell cellAtCoord = GetCellAdress(go.transform.position);
 
-                        cellAtCoord = GridManager.Instance.GridCells[cellAtCoord.GridPos.x + i, cellAtCoord.GridPos.y + j];
-                        cellAtCoord.GameObjectOnPos = go.gameObject;
-                        cellAtCoord.IsEmpty = false;
+                    cellAtCoord = GridManager.Instance.GridCells[cellAtCoord.GridPos.x + i, cellAtCoord.GridPos.y + j];
+                    cellAtCoord.GameObjectOnPos = go.gameObject;
+                    cellAtCoord.IsEmpty = false;
 
 
-                    }
                 }
             }
 
         }
 
-        public bool canMoveObjectToCell(GameObject go, GridCell to)
+        public bool canMoveObjectToCell(Unit go, GridCell to)
         {
-            
+
             if (IsCellEmpty(to))
             {
-                
+
                 setObjectOnCell(go, to);
+                removeObjectOnCell(go, _unitsOnGrid[go]);
+                _unitsOnGrid[go] = to;
                 return true;
             }
 
             return false;
-            
+
         }
 
-        private void setObjectOnCell(GameObject go, GridCell cell)
+        private void setObjectOnCell(Unit go, GridCell cell)
         {
 
             if (go.GetComponent<PlayableObject>())
@@ -153,7 +170,7 @@ namespace Assets.Scripts
 
 
         }
-        public void removeObjectOnPos(GameObject go)
+        private void removeObjectOnPos(GameObject go)
         {
 
             if (go.GetComponent<PlayableObject>())
@@ -168,13 +185,13 @@ namespace Assets.Scripts
                         cellAtCoord = GridManager.Instance.GridCells[cellAtCoord.GridPos.x + i, cellAtCoord.GridPos.y + j];
                         cellAtCoord.GameObjectOnPos = null;
                         cellAtCoord.IsEmpty = true;
-                        
+
                     }
                 }
             }
 
         }
-        public void removeObjectOnCell(GameObject go, GridCell cell)
+        private void removeObjectOnCell(Unit go, GridCell cell)
         {
             if (go.GetComponent<PlayableObject>())
             {
@@ -194,7 +211,7 @@ namespace Assets.Scripts
         }
 
 
-        public void SetCellsEmpty(int col, int row)
+        private void SetCellsEmpty(int col, int row)
         {
             if (col < _columns && col >= 0 && row < _rows && row >= 0)
             {
@@ -214,6 +231,18 @@ namespace Assets.Scripts
 
                 return GridCells[0, 0];
 
+            }
+        }
+
+        public GridCell GetCellAdress(Unit go)
+        {
+            if (_unitsOnGrid.ContainsKey(go))
+            {
+                return _unitsOnGrid[go];
+            }
+            else
+            {
+                return GetCellAdress(go.transform.position);
             }
         }
 

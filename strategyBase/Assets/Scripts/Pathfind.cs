@@ -21,7 +21,7 @@ namespace Assets.Scripts
 
         public List<GridCell> FindPath(GridCell start, GridCell target)//returns list of grid cells from start to target
         {
-            
+
 
             _gridCells = cloneGrid(GridManager.Instance.GridCells);
             GridManager.Instance.ResetPathfindData(_gridCells);
@@ -30,9 +30,9 @@ namespace Assets.Scripts
             _visitedCells = new List<GridCell>();
             start = _gridCells[start.GridPos.x, start.GridPos.y];
             GridCell currentCell = start;
-
-            start.IsVisited = true;
-            _visitedCells.Add(start);
+            
+            
+            //_visitedCells.Add(start);
           
             int whileKillLimit = 0;
             bool isAnyCellLeft = true;
@@ -41,22 +41,33 @@ namespace Assets.Scripts
             {
                 target = GridManager.Instance.GetClosestEmptyPos(target.WorldPos);
             }
-            
-            while (currentCell != target && whileKillLimit < 10000 && isAnyCellLeft)
+            target = _gridCells[target.GridPos.x, target.GridPos.y];
+            start.IsVisited = true;
+
+            while (currentCell != target && whileKillLimit < 1000 && isAnyCellLeft)
             {
+               List<GridCell> tempNeigbourCells = new List<GridCell>();
+               tempNeigbourCells = GetNeighborCells(currentCell);
+               if (tempNeigbourCells.Count > 0)
+               {
+                   CalculateCosts(tempNeigbourCells, target, currentCell);
+                   isAnyCellLeft = _calculatedCells.Count > 0;
+                   currentCell = FindNextCell();
 
-                CalculateCosts(GetNeighborCells(currentCell),  target, currentCell);
-                isAnyCellLeft = _calculatedCells.Count > 0;
-                currentCell = FindNextCell();
+                   _calculatedCells.Remove(currentCell);
+                   currentCell.IsVisited = true;
 
-                _calculatedCells.Remove(currentCell);
-                currentCell.IsVisited = true;
-             
-                _visitedCells.Add(currentCell);
+                   _visitedCells.Add(currentCell);
 
-                whileKillLimit++;
+               }
+               else
+               {
+                   return null;
+               }
+
+               whileKillLimit++;
             }
-
+            
 
             if (currentCell == target)
             {
@@ -75,8 +86,11 @@ namespace Assets.Scripts
            
         }
 
+        
+
         private GridCell[,] cloneGrid(GridCell[,] gridTable)
         {
+
               _gridCells = new GridCell[gridTable.GetLength(0), gridTable.GetLength(1)];
              foreach (GridCell cell in gridTable)
              {

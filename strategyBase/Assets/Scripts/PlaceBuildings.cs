@@ -75,13 +75,13 @@ namespace Assets.Scripts
 
         private void ReturnIndicatorsToPool()
         {
-            Debug.Log("1");
+            ;
             if (_activeIndicatorSquares.Count > 0)
             {
-                Debug.Log("2");
+
                 foreach (PooledObject square in _activeIndicatorSquares)
                 {
-                    Debug.Log("3");
+                  
                     square.ReturnToPool();
                 }
             }
@@ -140,21 +140,15 @@ namespace Assets.Scripts
         
         }
 
-        private void FillGridCells()//updates cells status with placed building info
-        {
-            if (currentBuilding)
-            {
-
-                GridManager.Instance.setObjectOnPos(currentBuilding);
-            }
-        }
         public void PlaceBuilding()//places building to mouse pos.
         {
             if (IsPlacementFieldEmpty())
             {
-                FillGridCells();
+              
                 ReturnIndicatorsToPool();
+                _currentBuildingInfo.enabled = true;
                 _currentBuildingInfo.setActive();
+               
                 currentBuilding = null;
             }
         }
